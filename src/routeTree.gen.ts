@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthenticatedAccountsRouteImport } from './routes/_authenticated/accounts'
 import { Route as AuthenticatedApprovalsRouteImport } from './routes/_authenticated/approvals'
+import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as AuthenticatedBankUsersRouteImport } from './routes/_authenticated/bank-users'
 import { Route as AuthenticatedConsoleRouteImport } from './routes/_authenticated/console'
 import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
@@ -51,6 +52,11 @@ const AuthenticatedAccountsRoute = AuthenticatedAccountsRouteImport.update({
 const AuthenticatedApprovalsRoute = AuthenticatedApprovalsRouteImport.update({
   id: '/approvals',
   path: '/approvals',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAuditRoute = AuthenticatedAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedBankUsersRoute = AuthenticatedBankUsersRouteImport.update({
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/accounts': typeof AuthenticatedAccountsRouteWithChildren
   '/approvals': typeof AuthenticatedApprovalsRoute
+  '/audit': typeof AuthenticatedAuditRoute
   '/bank-users': typeof AuthenticatedBankUsersRoute
   '/console': typeof AuthenticatedConsoleRoute
   '/customers': typeof AuthenticatedCustomersRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/accounts': typeof AuthenticatedAccountsRouteWithChildren
   '/approvals': typeof AuthenticatedApprovalsRoute
+  '/audit': typeof AuthenticatedAuditRoute
   '/bank-users': typeof AuthenticatedBankUsersRoute
   '/console': typeof AuthenticatedConsoleRoute
   '/customers': typeof AuthenticatedCustomersRoute
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/accounts': typeof AuthenticatedAccountsRouteWithChildren
   '/_authenticated/approvals': typeof AuthenticatedApprovalsRoute
+  '/_authenticated/audit': typeof AuthenticatedAuditRoute
   '/_authenticated/bank-users': typeof AuthenticatedBankUsersRoute
   '/_authenticated/console': typeof AuthenticatedConsoleRoute
   '/_authenticated/customers': typeof AuthenticatedCustomersRoute
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/accounts'
     | '/approvals'
+    | '/audit'
     | '/bank-users'
     | '/console'
     | '/customers'
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/accounts'
     | '/approvals'
+    | '/audit'
     | '/bank-users'
     | '/console'
     | '/customers'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/accounts'
     | '/_authenticated/approvals'
+    | '/_authenticated/audit'
     | '/_authenticated/bank-users'
     | '/_authenticated/console'
     | '/_authenticated/customers'
@@ -239,6 +251,13 @@ declare module '@tanstack/react-router' {
       path: '/approvals'
       fullPath: '/approvals'
       preLoaderRoute: typeof AuthenticatedApprovalsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/audit': {
+      id: '/_authenticated/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuthenticatedAuditRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/bank-users': {
@@ -316,6 +335,7 @@ const AuthenticatedAccountsRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountsRoute: typeof AuthenticatedAccountsRouteWithChildren
   AuthenticatedApprovalsRoute: typeof AuthenticatedApprovalsRoute
+  AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
   AuthenticatedBankUsersRoute: typeof AuthenticatedBankUsersRoute
   AuthenticatedConsoleRoute: typeof AuthenticatedConsoleRoute
   AuthenticatedCustomersRoute: typeof AuthenticatedCustomersRoute
@@ -328,6 +348,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountsRoute: AuthenticatedAccountsRouteWithChildren,
   AuthenticatedApprovalsRoute: AuthenticatedApprovalsRoute,
+  AuthenticatedAuditRoute: AuthenticatedAuditRoute,
   AuthenticatedBankUsersRoute: AuthenticatedBankUsersRoute,
   AuthenticatedConsoleRoute: AuthenticatedConsoleRoute,
   AuthenticatedCustomersRoute: AuthenticatedCustomersRoute,
