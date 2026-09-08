@@ -40,7 +40,7 @@ export function Icon({
       aria-hidden="true"
       {...props}
     >
-      <path d={paths[name] ?? paths.user} />
+      <path d={paths[name] ?? paths["user"]} />
     </svg>
   );
 }
