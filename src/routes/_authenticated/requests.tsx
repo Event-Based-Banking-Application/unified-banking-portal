@@ -51,7 +51,7 @@ function RequestsPage() {
         requesterName: user.name,
         type,
         details: details || REQUEST_TYPE_LABELS[type],
-        amount: amount ? Number(amount) : undefined,
+        ...(amount ? { amount: Number(amount) } : {}),
       });
       toast.success("Request submitted");
       qc.invalidateQueries({ queryKey: ["requests", user.id] });
