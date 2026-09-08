@@ -35,14 +35,8 @@ export function EventFeed({ limit }: { limit?: number }) {
           <span className="shrink-0 text-muted-foreground">
             {formatDateTime(ev.timestamp)}
           </span>
-          <span
-            className={cn(
-              "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium ring-1 ring-inset",
-              levelTone[ev.level],
-            )}
-            style={{}}
-          >
-            {levelLabel[ev.level]}
+          <span className="shrink-0">
+            <StatusPill tone={levelTone[ev.level]} label={levelLabel[ev.level]} />
           </span>
           <span className="truncate text-foreground">
             {ev.type} · {ev.message}
