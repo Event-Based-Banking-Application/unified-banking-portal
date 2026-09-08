@@ -10,33 +10,215 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as AuthenticatedAccountsRouteImport } from './routes/_authenticated/accounts'
+import { Route as AuthenticatedApprovalsRouteImport } from './routes/_authenticated/approvals'
+import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
+import { Route as AuthenticatedBankUsersRouteImport } from './routes/_authenticated/bank-users'
+import { Route as AuthenticatedConsoleRouteImport } from './routes/_authenticated/console'
+import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
+import { Route as AuthenticatedTransferRouteImport } from './routes/_authenticated/transfer'
+import { Route as AuthenticatedAccountsIdRouteImport } from './routes/_authenticated/accounts.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAccountsRoute = AuthenticatedAccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedApprovalsRoute = AuthenticatedApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAuditRoute = AuthenticatedAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBankUsersRoute = AuthenticatedBankUsersRouteImport.update({
+  id: '/bank-users',
+  path: '/bank-users',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedConsoleRoute = AuthenticatedConsoleRouteImport.update({
+  id: '/console',
+  path: '/console',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCustomersRoute = AuthenticatedCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEventsRoute = AuthenticatedEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRequestsRoute = AuthenticatedRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTransferRoute = AuthenticatedTransferRouteImport.update({
+  id: '/transfer',
+  path: '/transfer',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAccountsIdRoute = AuthenticatedAccountsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedAccountsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/signup': typeof SignupRoute
+  '/accounts': typeof AuthenticatedAccountsRouteWithChildren
+  '/approvals': typeof AuthenticatedApprovalsRoute
+  '/audit': typeof AuthenticatedAuditRoute
+  '/bank-users': typeof AuthenticatedBankUsersRoute
+  '/console': typeof AuthenticatedConsoleRoute
+  '/customers': typeof AuthenticatedCustomersRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/events': typeof AuthenticatedEventsRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/requests': typeof AuthenticatedRequestsRoute
+  '/transfer': typeof AuthenticatedTransferRoute
+  '/accounts/$id': typeof AuthenticatedAccountsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/signup': typeof SignupRoute
+  '/accounts': typeof AuthenticatedAccountsRouteWithChildren
+  '/approvals': typeof AuthenticatedApprovalsRoute
+  '/audit': typeof AuthenticatedAuditRoute
+  '/bank-users': typeof AuthenticatedBankUsersRoute
+  '/console': typeof AuthenticatedConsoleRoute
+  '/customers': typeof AuthenticatedCustomersRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/events': typeof AuthenticatedEventsRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/requests': typeof AuthenticatedRequestsRoute
+  '/transfer': typeof AuthenticatedTransferRoute
+  '/accounts/$id': typeof AuthenticatedAccountsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/signup': typeof SignupRoute
+  '/_authenticated/accounts': typeof AuthenticatedAccountsRouteWithChildren
+  '/_authenticated/approvals': typeof AuthenticatedApprovalsRoute
+  '/_authenticated/audit': typeof AuthenticatedAuditRoute
+  '/_authenticated/bank-users': typeof AuthenticatedBankUsersRoute
+  '/_authenticated/console': typeof AuthenticatedConsoleRoute
+  '/_authenticated/customers': typeof AuthenticatedCustomersRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/events': typeof AuthenticatedEventsRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/requests': typeof AuthenticatedRequestsRoute
+  '/_authenticated/transfer': typeof AuthenticatedTransferRoute
+  '/_authenticated/accounts/$id': typeof AuthenticatedAccountsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/signup'
+    | '/accounts'
+    | '/approvals'
+    | '/audit'
+    | '/bank-users'
+    | '/console'
+    | '/customers'
+    | '/dashboard'
+    | '/events'
+    | '/profile'
+    | '/requests'
+    | '/transfer'
+    | '/accounts/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/signup'
+    | '/accounts'
+    | '/approvals'
+    | '/audit'
+    | '/bank-users'
+    | '/console'
+    | '/customers'
+    | '/dashboard'
+    | '/events'
+    | '/profile'
+    | '/requests'
+    | '/transfer'
+    | '/accounts/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/signup'
+    | '/_authenticated/accounts'
+    | '/_authenticated/approvals'
+    | '/_authenticated/audit'
+    | '/_authenticated/bank-users'
+    | '/_authenticated/console'
+    | '/_authenticated/customers'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/events'
+    | '/_authenticated/profile'
+    | '/_authenticated/requests'
+    | '/_authenticated/transfer'
+    | '/_authenticated/accounts/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +230,163 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/accounts': {
+      id: '/_authenticated/accounts'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof AuthenticatedAccountsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/approvals': {
+      id: '/_authenticated/approvals'
+      path: '/approvals'
+      fullPath: '/approvals'
+      preLoaderRoute: typeof AuthenticatedApprovalsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/audit': {
+      id: '/_authenticated/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuthenticatedAuditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/bank-users': {
+      id: '/_authenticated/bank-users'
+      path: '/bank-users'
+      fullPath: '/bank-users'
+      preLoaderRoute: typeof AuthenticatedBankUsersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/console': {
+      id: '/_authenticated/console'
+      path: '/console'
+      fullPath: '/console'
+      preLoaderRoute: typeof AuthenticatedConsoleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/customers': {
+      id: '/_authenticated/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof AuthenticatedCustomersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/events': {
+      id: '/_authenticated/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof AuthenticatedEventsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/requests': {
+      id: '/_authenticated/requests'
+      path: '/requests'
+      fullPath: '/requests'
+      preLoaderRoute: typeof AuthenticatedRequestsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/transfer': {
+      id: '/_authenticated/transfer'
+      path: '/transfer'
+      fullPath: '/transfer'
+      preLoaderRoute: typeof AuthenticatedTransferRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/accounts/$id': {
+      id: '/_authenticated/accounts/$id'
+      path: '/$id'
+      fullPath: '/accounts/$id'
+      preLoaderRoute: typeof AuthenticatedAccountsIdRouteImport
+      parentRoute: typeof AuthenticatedAccountsRoute
+    }
   }
 }
 
+interface AuthenticatedAccountsRouteChildren {
+  AuthenticatedAccountsIdRoute: typeof AuthenticatedAccountsIdRoute
+}
+
+const AuthenticatedAccountsRouteChildren: AuthenticatedAccountsRouteChildren = {
+  AuthenticatedAccountsIdRoute: AuthenticatedAccountsIdRoute,
+}
+
+const AuthenticatedAccountsRouteWithChildren =
+  AuthenticatedAccountsRoute._addFileChildren(
+    AuthenticatedAccountsRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAccountsRoute: typeof AuthenticatedAccountsRouteWithChildren
+  AuthenticatedApprovalsRoute: typeof AuthenticatedApprovalsRoute
+  AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
+  AuthenticatedBankUsersRoute: typeof AuthenticatedBankUsersRoute
+  AuthenticatedConsoleRoute: typeof AuthenticatedConsoleRoute
+  AuthenticatedCustomersRoute: typeof AuthenticatedCustomersRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedRequestsRoute: typeof AuthenticatedRequestsRoute
+  AuthenticatedTransferRoute: typeof AuthenticatedTransferRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAccountsRoute: AuthenticatedAccountsRouteWithChildren,
+  AuthenticatedApprovalsRoute: AuthenticatedApprovalsRoute,
+  AuthenticatedAuditRoute: AuthenticatedAuditRoute,
+  AuthenticatedBankUsersRoute: AuthenticatedBankUsersRoute,
+  AuthenticatedConsoleRoute: AuthenticatedConsoleRoute,
+  AuthenticatedCustomersRoute: AuthenticatedCustomersRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEventsRoute: AuthenticatedEventsRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedRequestsRoute: AuthenticatedRequestsRoute,
+  AuthenticatedTransferRoute: AuthenticatedTransferRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
