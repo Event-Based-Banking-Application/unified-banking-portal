@@ -49,7 +49,7 @@ function ConsolePage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-        <section className="overflow-hidden rounded-xl border border-border bg-card">
+        <section className="min-w-0 overflow-hidden rounded-xl border border-border bg-card">
           <div className="border-b border-border px-4 py-3">
             <h2 className="text-sm font-semibold text-foreground">Services</h2>
           </div>
