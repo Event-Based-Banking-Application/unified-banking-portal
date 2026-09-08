@@ -15,6 +15,12 @@ export interface NavGroupDef {
 // Icon keys resolved to inline SVG in NavGroup component.
 export const NAV_GROUPS: NavGroupDef[] = [
   {
+    label: "Overview",
+    items: [
+      { label: "Dashboard", to: "/dashboard", permission: "profile:read", icon: "activity" },
+    ],
+  },
+  {
     label: "Customer",
     items: [
       { label: "Accounts", to: "/accounts", permission: "accounts:read", icon: "wallet" },
