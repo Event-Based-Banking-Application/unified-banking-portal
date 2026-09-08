@@ -3,7 +3,6 @@ import { api } from "@/lib/mock/api";
 import type { EventLevel } from "@/lib/mock/types";
 import { formatDateTime } from "@/lib/format";
 import { StatusPill } from "./status-pill";
-import { cn } from "@/lib/utils";
 
 const levelTone: Record<EventLevel, "success" | "warn" | "danger" | "info"> = {
   committed: "success",
