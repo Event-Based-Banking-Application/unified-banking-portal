@@ -83,7 +83,7 @@ function ProfilePage() {
           </p>
           <div className="mt-4 space-y-4">
             {PERMISSION_GROUPS.map((g) => {
-              const groupPerms = g.permissions.filter((p) => user.permissions.includes(p));
+              const groupPerms = g.items.filter((i) => user.permissions.includes(i.key));
               if (groupPerms.length === 0) return null;
               return (
                 <div key={g.label}>
@@ -91,12 +91,12 @@ function ProfilePage() {
                     {g.label}
                   </p>
                   <div className="mt-1.5 flex flex-wrap gap-1.5">
-                    {groupPerms.map((p) => (
+                    {groupPerms.map((i) => (
                       <span
-                        key={p}
+                        key={i.key}
                         className="rounded-md border border-border bg-muted/40 px-2 py-1 font-mono text-[11px] text-foreground"
                       >
-                        {p}
+                        {i.label}
                       </span>
                     ))}
                   </div>
