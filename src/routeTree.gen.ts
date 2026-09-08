@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthenticatedAccountsRouteImport } from './routes/_authenticated/accounts'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
 import { Route as AuthenticatedTransferRouteImport } from './routes/_authenticated/transfer'
 import { Route as AuthenticatedAccountsIdRouteImport } from './routes/_authenticated/accounts.$id'
 
@@ -47,6 +48,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRequestsRoute = AuthenticatedRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTransferRoute = AuthenticatedTransferRouteImport.update({
   id: '/transfer',
   path: '/transfer',
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/accounts': typeof AuthenticatedAccountsRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/requests': typeof AuthenticatedRequestsRoute
   '/transfer': typeof AuthenticatedTransferRoute
   '/accounts/$id': typeof AuthenticatedAccountsIdRoute
 }
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/accounts': typeof AuthenticatedAccountsRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/requests': typeof AuthenticatedRequestsRoute
   '/transfer': typeof AuthenticatedTransferRoute
   '/accounts/$id': typeof AuthenticatedAccountsIdRoute
 }
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/accounts': typeof AuthenticatedAccountsRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/requests': typeof AuthenticatedRequestsRoute
   '/_authenticated/transfer': typeof AuthenticatedTransferRoute
   '/_authenticated/accounts/$id': typeof AuthenticatedAccountsIdRoute
 }
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/accounts'
     | '/dashboard'
+    | '/requests'
     | '/transfer'
     | '/accounts/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/accounts'
     | '/dashboard'
+    | '/requests'
     | '/transfer'
     | '/accounts/$id'
   id:
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/accounts'
     | '/_authenticated/dashboard'
+    | '/_authenticated/requests'
     | '/_authenticated/transfer'
     | '/_authenticated/accounts/$id'
   fileRoutesById: FileRoutesById
@@ -169,6 +181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/requests': {
+      id: '/_authenticated/requests'
+      path: '/requests'
+      fullPath: '/requests'
+      preLoaderRoute: typeof AuthenticatedRequestsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/transfer': {
       id: '/_authenticated/transfer'
       path: '/transfer'
@@ -202,12 +221,14 @@ const AuthenticatedAccountsRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAccountsRoute: typeof AuthenticatedAccountsRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedRequestsRoute: typeof AuthenticatedRequestsRoute
   AuthenticatedTransferRoute: typeof AuthenticatedTransferRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAccountsRoute: AuthenticatedAccountsRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedRequestsRoute: AuthenticatedRequestsRoute,
   AuthenticatedTransferRoute: AuthenticatedTransferRoute,
 }
 
