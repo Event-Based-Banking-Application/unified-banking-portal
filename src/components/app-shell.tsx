@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, Outlet, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth/auth-context";
 import { NAV_GROUPS } from "@/lib/nav";
-import { NavGroup } from "./nav-group";
+import { NavGroupRail } from "./nav-group";
 import { Brand } from "./brand";
 import { RoleBadge } from "./role-badge";
 import { Icon } from "./icons";
