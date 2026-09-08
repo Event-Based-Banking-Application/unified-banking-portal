@@ -44,7 +44,6 @@ function DashboardPage() {
 function CustomerDashboard() {
   const { user } = useAuth();
   if (!user) return null;
-  const userId = user.id;
   const { data: accounts } = useQuery({
     queryKey: ["accounts", user.id],
     queryFn: () => api.getAccounts(user.id),
