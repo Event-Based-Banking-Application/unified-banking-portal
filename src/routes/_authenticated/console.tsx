@@ -48,11 +48,11 @@ function ConsolePage() {
         <StatCard label="Min uptime" value={`${Math.min(...list.map((s) => s.uptimePct), 100)}%`} />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-        <section className="min-w-0 overflow-hidden rounded-xl border border-border bg-card">
-          <div className="border-b border-border px-4 py-3">
-            <h2 className="text-sm font-semibold text-foreground">Services</h2>
-          </div>
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
+        <div className="border-b border-border px-4 py-3">
+          <h2 className="text-sm font-semibold text-foreground">Services</h2>
+        </div>
+        <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="border-b border-border bg-muted/40 text-left text-[11px] uppercase tracking-wider text-muted-foreground">
               <tr>
@@ -79,7 +79,8 @@ function ConsolePage() {
               ))}
             </tbody>
           </table>
-        </section>
+        </div>
+      </div>
 
         <section className="overflow-hidden rounded-xl border border-border bg-card">
           <div className="border-b border-border px-4 py-3">
