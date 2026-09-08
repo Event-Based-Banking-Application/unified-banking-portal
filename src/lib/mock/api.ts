@@ -90,7 +90,7 @@ export const api = {
       requesterId: input.requesterId,
       requesterName: input.requesterName,
       details: input.details,
-      amount: input.amount,
+      ...(input.amount !== undefined ? { amount: input.amount } : {}),
       status: "pending",
       createdAt: new Date().toISOString(),
     };
