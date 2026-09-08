@@ -48,7 +48,7 @@ function ConsolePage() {
         <StatCard label="Min uptime" value={`${Math.min(...list.map((s) => s.uptimePct), 100)}%`} />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
         <section className="min-w-0 overflow-hidden rounded-xl border border-border bg-card">
           <div className="border-b border-border px-4 py-3">
             <h2 className="text-sm font-semibold text-foreground">Services</h2>
