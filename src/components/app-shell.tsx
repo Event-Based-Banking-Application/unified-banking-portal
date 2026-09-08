@@ -127,5 +127,3 @@ export function AppShell() {
     </div>
   );
 }
-
-import { NavGroupRail } from "./nav-group";
