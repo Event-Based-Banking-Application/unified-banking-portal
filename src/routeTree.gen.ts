@@ -19,6 +19,7 @@ import { Route as AuthenticatedBankUsersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedConsoleRouteImport } from './routes/_authenticated/console'
 import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
 import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
 import { Route as AuthenticatedTransferRouteImport } from './routes/_authenticated/transfer'
 import { Route as AuthenticatedAccountsIdRouteImport } from './routes/_authenticated/accounts.$id'
@@ -72,6 +73,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEventsRoute = AuthenticatedEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRequestsRoute = AuthenticatedRequestsRouteImport.update({
   id: '/requests',
   path: '/requests',
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/console': typeof AuthenticatedConsoleRoute
   '/customers': typeof AuthenticatedCustomersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/events': typeof AuthenticatedEventsRoute
   '/requests': typeof AuthenticatedRequestsRoute
   '/transfer': typeof AuthenticatedTransferRoute
   '/accounts/$id': typeof AuthenticatedAccountsIdRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/console': typeof AuthenticatedConsoleRoute
   '/customers': typeof AuthenticatedCustomersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/events': typeof AuthenticatedEventsRoute
   '/requests': typeof AuthenticatedRequestsRoute
   '/transfer': typeof AuthenticatedTransferRoute
   '/accounts/$id': typeof AuthenticatedAccountsIdRoute
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/_authenticated/console': typeof AuthenticatedConsoleRoute
   '/_authenticated/customers': typeof AuthenticatedCustomersRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/events': typeof AuthenticatedEventsRoute
   '/_authenticated/requests': typeof AuthenticatedRequestsRoute
   '/_authenticated/transfer': typeof AuthenticatedTransferRoute
   '/_authenticated/accounts/$id': typeof AuthenticatedAccountsIdRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/console'
     | '/customers'
     | '/dashboard'
+    | '/events'
     | '/requests'
     | '/transfer'
     | '/accounts/$id'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/console'
     | '/customers'
     | '/dashboard'
+    | '/events'
     | '/requests'
     | '/transfer'
     | '/accounts/$id'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/_authenticated/console'
     | '/_authenticated/customers'
     | '/_authenticated/dashboard'
+    | '/_authenticated/events'
     | '/_authenticated/requests'
     | '/_authenticated/transfer'
     | '/_authenticated/accounts/$id'
@@ -257,6 +269,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/events': {
+      id: '/_authenticated/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof AuthenticatedEventsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/requests': {
       id: '/_authenticated/requests'
       path: '/requests'
@@ -301,6 +320,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedConsoleRoute: typeof AuthenticatedConsoleRoute
   AuthenticatedCustomersRoute: typeof AuthenticatedCustomersRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
   AuthenticatedRequestsRoute: typeof AuthenticatedRequestsRoute
   AuthenticatedTransferRoute: typeof AuthenticatedTransferRoute
 }
@@ -312,6 +332,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedConsoleRoute: AuthenticatedConsoleRoute,
   AuthenticatedCustomersRoute: AuthenticatedCustomersRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEventsRoute: AuthenticatedEventsRoute,
   AuthenticatedRequestsRoute: AuthenticatedRequestsRoute,
   AuthenticatedTransferRoute: AuthenticatedTransferRoute,
 }
