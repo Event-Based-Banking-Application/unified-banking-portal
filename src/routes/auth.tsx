@@ -31,14 +31,15 @@ function AuthPage() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const result = await signIn(email, password);
-    setLoading(false);
-    if (!result.ok) {
-      setError(result.error ?? "Unable to sign in.");
-      return;
+    try {
+      await signIn(email, password);
+      toast.success("Signed in");
+      navigate({ to: "/dashboard", replace: true });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to sign in.");
+    } finally {
+      setLoading(false);
     }
-    toast.success("Signed in");
-    navigate({ to: "/dashboard", replace: true });
   }
 
   function quickFill(e: string) {
