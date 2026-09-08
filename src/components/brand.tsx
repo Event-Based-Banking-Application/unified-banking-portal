@@ -5,21 +5,19 @@ export function Brand({
   size?: "sm" | "md";
   showWordmark?: boolean;
 }) {
-  const box = size === "sm" ? "size-7 rounded-md" : "size-9 rounded-lg";
-  const text = size === "sm" ? "text-sm" : "text-[15px]";
+  const box = size === "sm" ? "size-7" : "size-9";
+  const text = size === "sm" ? "text-lg" : "text-[22px]";
   return (
     <div className="flex items-center gap-2.5">
-      <div className={`grid place-items-center bg-primary text-primary-foreground ring-1 ring-primary/40 ${box}`}>
-        <span className="font-mono font-semibold leading-none">V</span>
+      <div className={`grid place-items-center bg-primary text-primary-foreground ${box}`}>
+        <span className="font-display leading-none">V</span>
       </div>
       {showWordmark && (
         <div className="leading-none">
-          <p className={`${text} font-semibold tracking-tight text-foreground`}>
-            Vantage
+          <p className={`${text} font-display leading-none text-foreground`}>
+            VANTAGE
           </p>
-          <p className="mt-0.5 font-mono text-[10px] text-muted-foreground">
-            event banking
-          </p>
+          <p className="eyebrow mt-1 text-muted-foreground">event banking</p>
         </div>
       )}
     </div>

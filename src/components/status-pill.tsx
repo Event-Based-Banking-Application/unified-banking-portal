@@ -3,11 +3,11 @@ import { cn } from "@/lib/utils";
 type Tone = "success" | "warn" | "danger" | "info" | "muted";
 
 const toneClasses: Record<Tone, string> = {
-  success: "bg-success/12 text-success ring-success/25",
-  warn: "bg-warn/12 text-warn ring-warn/25",
-  danger: "bg-destructive/12 text-destructive ring-destructive/25",
-  info: "bg-info/12 text-info ring-info/25",
-  muted: "bg-muted text-muted-foreground ring-border",
+  success: "text-success ring-success/40",
+  warn: "text-warn ring-warn/40",
+  danger: "text-destructive ring-destructive/40",
+  info: "text-info ring-info/40",
+  muted: "text-muted-foreground ring-border",
 };
 
 const dotClasses: Record<Tone, string> = {
@@ -32,17 +32,13 @@ export function StatusPill({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium ring-1 ring-inset",
+        "inline-flex items-center gap-1.5 bg-background px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] ring-1 ring-inset",
         toneClasses[tone],
         className,
       )}
     >
       <span
-        className={cn(
-          "size-1.5 rounded-full",
-          dotClasses[tone],
-          live && "live-dot",
-        )}
+        className={cn("size-1.5", dotClasses[tone], live && "live-dot")}
       />
       {label}
     </span>

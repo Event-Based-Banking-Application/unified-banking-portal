@@ -41,7 +41,8 @@ export const ROLE_LABELS: Record<Role, string> = {
 };
 
 export const ROLE_TONES: Record<Role, string> = {
-  customer: "text-accent bg-accent/10 ring-accent/30",
-  bank_admin: "text-warn bg-warn/10 ring-warn/30",
-  system_admin: "text-info bg-info/10 ring-info/30",
+  customer: "text-primary-foreground bg-primary ring-primary",
+  bank_admin: "text-foreground bg-background ring-foreground",
+  system_admin: "text-muted-foreground bg-muted ring-border",
 };
+

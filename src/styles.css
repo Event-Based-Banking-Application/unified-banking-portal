@@ -5,18 +5,18 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Event-driven banking platform design system.
- * Dark slate base, single teal accent, amber for pending, red for alert.
- * Inter (UI) + JetBrains Mono (numeric/event/terminal data).
+ * Editorial magazine design system (Wired-inspired).
+ * Strict black-on-white duet, square geometry, hairline dividers.
+ * Playfair Display (display serif) + Lora (body serif) + Inter (sans labels).
  */
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -36,6 +36,7 @@
   --color-success: var(--success);
   --color-warn: var(--warn);
   --color-info: var(--info);
+  --color-link: var(--link);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -53,85 +54,51 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Playfair Display", "Times New Roman", Georgia, serif;
+  --font-serif: "Lora", Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
-:root {
-  --radius: 0.625rem;
-  --background: oklch(0.16 0.022 256);
-  --foreground: oklch(0.96 0.004 240);
-  --card: oklch(0.205 0.024 256);
-  --card-foreground: oklch(0.96 0.004 240);
-  --popover: oklch(0.205 0.024 256);
-  --popover-foreground: oklch(0.96 0.004 240);
-  --primary: oklch(0.78 0.14 180);
-  --primary-foreground: oklch(0.16 0.022 256);
-  --secondary: oklch(0.27 0.03 258);
-  --secondary-foreground: oklch(0.96 0.004 240);
-  --muted: oklch(0.24 0.025 258);
-  --muted-foreground: oklch(0.68 0.03 256);
-  --accent: oklch(0.78 0.14 180);
-  --accent-foreground: oklch(0.16 0.022 256);
-  --destructive: oklch(0.62 0.21 25);
-  --destructive-foreground: oklch(0.98 0.003 240);
-  --success: oklch(0.72 0.15 155);
-  --warn: oklch(0.79 0.15 75);
-  --info: oklch(0.72 0.12 230);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.78 0.14 180);
-  --chart-1: oklch(0.78 0.14 180);
-  --chart-2: oklch(0.79 0.15 75);
-  --chart-3: oklch(0.62 0.21 25);
-  --chart-4: oklch(0.72 0.12 230);
-  --chart-5: oklch(0.72 0.15 155);
-  --sidebar: oklch(0.185 0.023 256);
-  --sidebar-foreground: oklch(0.96 0.004 240);
-  --sidebar-primary: oklch(0.78 0.14 180);
-  --sidebar-primary-foreground: oklch(0.16 0.022 256);
-  --sidebar-accent: oklch(0.24 0.025 258);
-  --sidebar-accent-foreground: oklch(0.96 0.004 240);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.78 0.14 180);
-}
-
+:root,
 .dark {
-  --background: oklch(0.16 0.022 256);
-  --foreground: oklch(0.96 0.004 240);
-  --card: oklch(0.205 0.024 256);
-  --card-foreground: oklch(0.96 0.004 240);
-  --popover: oklch(0.205 0.024 256);
-  --popover-foreground: oklch(0.96 0.004 240);
-  --primary: oklch(0.78 0.14 180);
-  --primary-foreground: oklch(0.16 0.022 256);
-  --secondary: oklch(0.27 0.03 258);
-  --secondary-foreground: oklch(0.96 0.004 240);
-  --muted: oklch(0.24 0.025 258);
-  --muted-foreground: oklch(0.68 0.03 256);
-  --accent: oklch(0.78 0.14 180);
-  --accent-foreground: oklch(0.16 0.022 256);
-  --destructive: oklch(0.62 0.21 25);
-  --destructive-foreground: oklch(0.98 0.003 240);
-  --success: oklch(0.72 0.15 155);
-  --warn: oklch(0.79 0.15 75);
-  --info: oklch(0.72 0.12 230);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.78 0.14 180);
-  --chart-1: oklch(0.78 0.14 180);
-  --chart-2: oklch(0.79 0.15 75);
-  --chart-3: oklch(0.62 0.21 25);
-  --chart-4: oklch(0.72 0.12 230);
-  --chart-5: oklch(0.72 0.15 155);
-  --sidebar: oklch(0.185 0.023 256);
-  --sidebar-foreground: oklch(0.96 0.004 240);
-  --sidebar-primary: oklch(0.78 0.14 180);
-  --sidebar-primary-foreground: oklch(0.16 0.022 256);
-  --sidebar-accent: oklch(0.24 0.025 258);
-  --sidebar-accent-foreground: oklch(0.96 0.004 240);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.78 0.14 180);
+  --radius: 0px;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0 0 0);
+  --primary: oklch(0 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.967 0 0);
+  --secondary-foreground: oklch(0 0 0);
+  --muted: oklch(0.967 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.967 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.44 0.17 24);
+  --destructive-foreground: oklch(1 0 0);
+  --success: oklch(0.44 0.09 155);
+  --warn: oklch(0.52 0.11 70);
+  --info: oklch(0.52 0.12 240);
+  --link: oklch(0.52 0.12 240);
+  --border: oklch(0.892 0 0);
+  --input: oklch(0 0 0);
+  --ring: oklch(0 0 0);
+  --chart-1: oklch(0 0 0);
+  --chart-2: oklch(0.35 0 0);
+  --chart-3: oklch(0.556 0 0);
+  --chart-4: oklch(0.72 0 0);
+  --chart-5: oklch(0.52 0.12 240);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0 0 0);
+  --sidebar-primary: oklch(0 0 0);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.967 0 0);
+  --sidebar-accent-foreground: oklch(0 0 0);
+  --sidebar-border: oklch(0.892 0 0);
+  --sidebar-ring: oklch(0 0 0);
 }
 
 @layer base {
@@ -146,6 +113,13 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
   .font-mono,
   .tabular-nums {
     font-variant-numeric: tabular-nums;
@@ -153,6 +127,20 @@
 }
 
 @layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 400;
+  }
+  .font-editorial {
+    font-family: var(--font-serif);
+  }
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
   .live-dot {
     animation: livePulse 1.8s ease-in-out infinite;
   }
@@ -168,3 +156,4 @@
     to { opacity: 1; transform: none; }
   }
 }
+
