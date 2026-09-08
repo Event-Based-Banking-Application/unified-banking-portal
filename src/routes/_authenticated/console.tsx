@@ -79,18 +79,16 @@ function ConsolePage() {
               ))}
             </tbody>
           </table>
-        </div>
       </div>
 
-        <section className="overflow-hidden rounded-xl border border-border bg-card">
-          <div className="border-b border-border px-4 py-3">
-            <h2 className="text-sm font-semibold text-foreground">Live event stream</h2>
-          </div>
-          <div className="max-h-[28rem] overflow-y-auto">
-            <EventFeed />
-          </div>
-        </section>
-      </div>
+      <section className="overflow-hidden rounded-xl border border-border bg-card">
+        <div className="border-b border-border px-4 py-3">
+          <h2 className="text-sm font-semibold text-foreground">Live event stream</h2>
+        </div>
+        <div className="max-h-[28rem] overflow-y-auto">
+          <EventFeed />
+        </div>
+      </section>
     </div>
   );
 }
