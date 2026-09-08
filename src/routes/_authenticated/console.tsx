@@ -79,6 +79,7 @@ function ConsolePage() {
               ))}
             </tbody>
           </table>
+        </div>
       </div>
 
       <section className="overflow-hidden rounded-xl border border-border bg-card">
