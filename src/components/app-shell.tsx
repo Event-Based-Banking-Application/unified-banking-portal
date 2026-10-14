@@ -6,8 +6,18 @@ import { NavGroupRail } from "./nav-group";
 import { Brand } from "./brand";
 import { RoleBadge } from "./role-badge";
 import { Icon } from "./icons";
+import { CommandLineProvider, useCommandLine } from "./command-line";
 
 export function AppShell() {
+  return (
+    <CommandLineProvider>
+      <ShellInner />
+    </CommandLineProvider>
+  );
+}
+
+function ShellInner() {
+  const cli = useCommandLine();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -98,13 +108,20 @@ export function AppShell() {
               {user && <RoleBadge role={user.role} />}
             </div>
             <div className="flex items-center gap-2">
-              <div className="hidden items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 text-muted-foreground sm:flex">
-                <Icon name="search" className="size-4" />
-                <span className="text-[12px]">Search…</span>
+              <button
+                onClick={cli.open}
+                className="sm:hidden rounded-lg border border-border bg-card px-2 py-1.5 font-mono text-[12px] text-muted-foreground hover:bg-muted"
+                aria-label="Open command line"
+              >
+                {">_"}
+              </button>
+              <button onClick={cli.open} className="hidden items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 text-muted-foreground hover:bg-muted sm:flex">
+                <span className="font-mono text-[12px]">{">_"}</span>
+                <span className="text-[12px]">Run a command…</span>
                 <span className="ml-3 rounded border border-border px-1 font-mono text-[10px] text-muted-foreground">
                   /
                 </span>
-              </div>
+              </button>
               <button className="relative rounded-lg border border-border bg-card p-2 text-muted-foreground hover:bg-muted">
                 <Icon name="bell" className="size-4" />
                 <span className="absolute right-1.5 top-1.5 size-1.5 rounded-full bg-warn" />
