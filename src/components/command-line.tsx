@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth/auth-context";
 import { available, parse, resolve, type Line } from "@/lib/cli/registry";
 import { DEMO_CREDENTIALS } from "@/lib/mock/seed";
+import type { MfaChallenge } from "@/lib/auth/mock-auth";
 
 interface Entry { prompt?: string; lines: Line[] }
 const Ctx = createContext<{ open: () => void } | null>(null);
@@ -60,7 +61,8 @@ function OutputLine({ line, onLink, onPick }: { line: Line; onLink: () => void; 
 }
 
 function Terminal({ onClose }: { onClose: () => void }) {
-  const { user, signOut, signIn } = useAuth();
+  const { user, signOut, startSignIn, verifyMfa } = useAuth();
+  const [mfa, setMfa] = useState<MfaChallenge | null>(null);
   const [loginEmail, setLoginEmail] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -88,15 +90,39 @@ function Terminal({ onClose }: { onClose: () => void }) {
   const guest = async (input: string) => {
     const err = (text: string): Line => ({ kind: "text", tone: "error", text });
     const muted = (text: string): Line => ({ kind: "text", tone: "muted", text });
+    const askCode = (c: MfaChallenge): Line[] => [
+      muted(`MFA step ${c.step}/${c.totalSteps}: enter the 6-digit ${c.method === "totp" ? "authenticator" : "email"} code sent to ${c.maskedDestination}.`),
+      ...(c.role !== "customer" ? [{ kind: "text" as const, tone: "warn" as const, text: "Admin account: two factors required, 3 attempts, 2-minute codes." }] : []),
+      muted(`(demo code: ${c.demoCode})`),
+    ];
+    if (mfa) {
+      print({ prompt: input.replace(/./g, "•"), lines: [] });
+      if (/^(cancel|exit)$/i.test(input)) { setMfa(null); return print({ lines: [muted("Sign-in cancelled.")] }); }
+      setBusy(true);
+      try {
+        const res = await verifyMfa(mfa.id, input);
+        if (res.done) {
+          setMfa(null);
+          print({ lines: [{ kind: "text", tone: "ok", text: `✓ Signed in as ${res.session.user.name}. Type "help" to see your commands.` }] });
+          navigate({ to: "/dashboard", replace: true });
+        } else { setMfa(res.challenge); print({ lines: [{ kind: "text", tone: "ok", text: "✓ Factor verified." }, ...askCode(res.challenge)] }); }
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Verification failed.";
+        if (/expired|locked|sign in again/i.test(msg)) setMfa(null);
+        print({ lines: [err(msg)] });
+      }
+      setBusy(false);
+      return;
+    }
     if (loginEmail) {
       const email = loginEmail;
       setLoginEmail(null);
       print({ prompt: "********", lines: [] });
       setBusy(true);
       try {
-        const s = await signIn(email, input);
-        print({ lines: [{ kind: "text", tone: "ok", text: `✓ Signed in as ${s.user.name}. Type "help" to see your commands.` }] });
-        navigate({ to: "/dashboard", replace: true });
+        const c = await startSignIn(email, input);
+        setMfa(c);
+        print({ lines: askCode(c) });
       } catch (e) { print({ lines: [err(e instanceof Error ? e.message : "Sign-in failed.")] }); }
       setBusy(false);
       return;
@@ -144,7 +170,7 @@ function Terminal({ onClose }: { onClose: () => void }) {
       return;
     }
     if (!input) return print({ prompt: "", lines: [] });
-    if (!loginEmail) setHistory((h) => [...h, input]);
+    if (!loginEmail && !mfa) setHistory((h) => [...h, input]);
     const match = resolve(input);
     if (!match) return print({ prompt: input, lines: [{ kind: "text", tone: "error", text: `Unknown command "${input.split(" ")[0]}". Type "help".` }] });
     const { cmd, rest } = match;
@@ -167,7 +193,7 @@ function Terminal({ onClose }: { onClose: () => void }) {
     }
     setBusy(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, queryClient, history, navigate, signOut, onClose, loginEmail]);
+  }, [user, queryClient, history, navigate, signOut, onClose, loginEmail, mfa]);
 
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Escape") onClose();
@@ -204,7 +230,7 @@ function Terminal({ onClose }: { onClose: () => void }) {
         </div>
       )}
       <div className="flex items-center gap-2 border-t border-border px-4 py-2.5">
-        <span className="shrink-0 text-primary">{loginEmail ? "password:" : pending.current ? "confirm>" : prompt}</span>
+        <span className="shrink-0 text-primary">{mfa ? "code:" : loginEmail ? "password:" : pending.current ? "confirm>" : prompt}</span>
         <input
           ref={inputRef}
           value={value}
