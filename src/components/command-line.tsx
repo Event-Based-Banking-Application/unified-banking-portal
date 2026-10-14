@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth/auth-context";
 import { available, parse, resolve, type Line } from "@/lib/cli/registry";
+import { DEMO_CREDENTIALS } from "@/lib/mock/seed";
 
 interface Entry { prompt?: string; lines: Line[] }
 const Ctx = createContext<{ open: () => void } | null>(null);
@@ -47,7 +48,8 @@ function OutputLine({ line, onLink }: { line: Line; onLink: () => void }) {
 }
 
 function Terminal({ onClose }: { onClose: () => void }) {
-  const { user, signOut } = useAuth();
+  const { user, signOut, signIn } = useAuth();
+  const [loginEmail, setLoginEmail] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [entries, setEntries] = useState<Entry[]>([{ lines: [{ kind: "text", text: 'Vantage CLI — type "help" to see what you can do.', tone: "muted" }] }]);
@@ -63,6 +65,7 @@ function Terminal({ onClose }: { onClose: () => void }) {
   useEffect(() => { bottomRef.current?.scrollIntoView({ block: "end" }); }, [entries]);
 
   const prompt = `${user?.email.split("@")[0] ?? "guest"}@vantage:~$`;
+  useEffect(() => { if (!user) setEntries([{ lines: [{ kind: "text", tone: "muted", text: 'Vantage CLI — type "login <email>" to sign in, or "demo" for demo accounts.' }] }]); }, [user]);
   const cmds = user ? available(user) : [];
   const suggestions = value.trim() && !pending.current
     ? cmds.flatMap((c) => [c.name, ...(c.aliases ?? [])]).filter((n) => n.startsWith(value.trim().toLowerCase()) && n !== value.trim().toLowerCase()).slice(0, 6)
@@ -70,9 +73,52 @@ function Terminal({ onClose }: { onClose: () => void }) {
 
   const print = (e: Entry) => setEntries((x) => [...x, e]);
 
+  const guest = async (input: string) => {
+    const err = (text: string): Line => ({ kind: "text", tone: "error", text });
+    const muted = (text: string): Line => ({ kind: "text", tone: "muted", text });
+    if (loginEmail) {
+      const email = loginEmail;
+      setLoginEmail(null);
+      print({ prompt: "********", lines: [] });
+      setBusy(true);
+      try {
+        const s = await signIn(email, input);
+        print({ lines: [{ kind: "text", tone: "ok", text: `✓ Signed in as ${s.user.name}. Type "help" to see your commands.` }] });
+        navigate({ to: "/dashboard", replace: true });
+      } catch (e) { print({ lines: [err(e instanceof Error ? e.message : "Sign-in failed.")] }); }
+      setBusy(false);
+      return;
+    }
+    const [cmd, ...args] = input.split(/\s+/);
+    switch ((cmd ?? "").toLowerCase()) {
+      case "": return print({ prompt: "", lines: [] });
+      case "help":
+        return print({ prompt: input, lines: [
+          muted("You're not signed in. Available commands:"),
+          { kind: "table", head: ["Command", "What it does"], rows: [
+            ["login <email>", "Sign in (you'll be asked for your password)"],
+            ["demo", "List demo accounts"],
+            ["signup", "Open the request-access page"],
+            ["clear", "Clear the screen"],
+          ] },
+        ] });
+      case "login": case "signin": {
+        const email = args[0];
+        if (!email) return print({ prompt: input, lines: [err("Usage: login you@vantagebank.com")] });
+        setLoginEmail(email);
+        return print({ prompt: input, lines: [muted(`Password for ${email}:`)] });
+      }
+      case "demo":
+        return print({ prompt: input, lines: [{ kind: "table", head: ["Role", "Email", "Password"], rows: DEMO_CREDENTIALS.map((c) => [String(c.role), c.email, c.password]) }] });
+      case "signup": navigate({ to: "/signup" }); onClose(); return;
+      case "clear": return setEntries([]);
+      default: return print({ prompt: input, lines: [err(`Sign in first: "login <email>". Type "help" for options.`)] });
+    }
+  };
+
   const run = useCallback(async (raw: string) => {
     const input = raw.trim();
-    if (!user) return;
+    if (!user) return guest(input);
     if (pending.current) {
       const action = pending.current;
       pending.current = null;
@@ -86,7 +132,7 @@ function Terminal({ onClose }: { onClose: () => void }) {
       return;
     }
     if (!input) return print({ prompt: "", lines: [] });
-    setHistory((h) => [...h, input]);
+    if (!loginEmail) setHistory((h) => [...h, input]);
     const match = resolve(input);
     if (!match) return print({ prompt: input, lines: [{ kind: "text", tone: "error", text: `Unknown command "${input.split(" ")[0]}". Type "help".` }] });
     const { cmd, rest } = match;
@@ -108,7 +154,8 @@ function Terminal({ onClose }: { onClose: () => void }) {
       print({ prompt: input, lines: [{ kind: "text", tone: "error", text: err instanceof Error ? err.message : "Command failed." }] });
     }
     setBusy(false);
-  }, [user, queryClient, history, navigate, signOut, onClose]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, queryClient, history, navigate, signOut, onClose, loginEmail]);
 
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Escape") onClose();
@@ -145,10 +192,11 @@ function Terminal({ onClose }: { onClose: () => void }) {
         </div>
       )}
       <div className="flex items-center gap-2 border-t border-border px-4 py-2.5">
-        <span className="shrink-0 text-primary">{pending.current ? "confirm>" : prompt}</span>
+        <span className="shrink-0 text-primary">{loginEmail ? "password:" : pending.current ? "confirm>" : prompt}</span>
         <input
           ref={inputRef}
           value={value}
+          type={loginEmail ? "password" : "text"}
           disabled={busy}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={onKeyDown}
