@@ -65,13 +65,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       isAuthenticated: !!session,
       isLoading,
-      signIn,
+      startSignIn, verifyMfa, resendMfa,
       signUp,
       signOut,
       can: (p) => canFn(user, p),
       canAny: (ps) => canAnyFn(user, ps),
     };
-  }, [session, isLoading, signIn, signUp, signOut]);
+  }, [session, isLoading, verifyMfa, signUp, signOut]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
