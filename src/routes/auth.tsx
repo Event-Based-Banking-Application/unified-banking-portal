@@ -30,7 +30,7 @@ export const Route = createFileRoute("/auth")({
       },
     ],
   }),
-  component: AuthPage,
+  component: () => (<CommandLineProvider><AuthPage /></CommandLineProvider>),
 });
 
 function AuthPage() {
