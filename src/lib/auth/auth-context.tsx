@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import type { AuthSession, Permission, SessionUser } from "./types";
-import { getSession, signIn as mockSignIn, signOut as mockSignOut, signUp as mockSignUp } from "./mock-auth";
+import { getSession, startSignIn, verifyMfa as mockVerify, resendMfa, signOut as mockSignOut, signUp as mockSignUp, type MfaChallenge } from "./mock-auth";
 import { can as canFn, canAny as canAnyFn } from "./permissions";
 
 interface AuthContextValue {
@@ -16,7 +16,9 @@ interface AuthContextValue {
   user: SessionUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<AuthSession>;
+  startSignIn: (email: string, password: string) => Promise<MfaChallenge>;
+  verifyMfa: (challengeId: string, code: string) => Promise<{ done: true; session: AuthSession } | { done: false; challenge: MfaChallenge }>;
+  resendMfa: (challengeId: string) => Promise<MfaChallenge>;
   signUp: (
     name: string,
     email: string,
@@ -38,10 +40,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const signIn = useCallback(async (email: string, password: string) => {
-    const next = await mockSignIn(email, password);
-    setSession(next);
-    return next;
+  const verifyMfa = useCallback(async (challengeId: string, code: string) => {
+    const res = await mockVerify(challengeId, code);
+    if (res.done) setSession(res.session);
+    return res;
   }, []);
 
   const signUp = useCallback(
