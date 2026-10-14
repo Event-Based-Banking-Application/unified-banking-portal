@@ -5,11 +5,13 @@ import { api } from "@/lib/mock/api";
 import { formatCurrency, formatDateTime, maskedAccount } from "@/lib/format";
 import { NAV_GROUPS } from "@/lib/nav";
 import type { MockAccount, RequestType } from "@/lib/mock/types";
+import { suggestCommands } from "./assist.functions";
 
 export type Line =
   | { kind: "text"; text: string; tone?: "muted" | "ok" | "warn" | "error" }
   | { kind: "table"; head: string[]; rows: string[][] }
-  | { kind: "link"; text: string; to: string };
+  | { kind: "link"; text: string; to: string }
+  | { kind: "suggest"; command: string; explanation: string; changesData: boolean };
 
 export interface Ctx {
   user: SessionUser;
@@ -121,6 +123,25 @@ export const COMMANDS: Command[] = [
         return [t(`Unknown page "${key}". Try: ${pages.map((p) => p.to.slice(1)).join(", ")}`, "error")];
       navigate(to);
       return [t(`→ ${to}`, "ok")];
+    },
+  },
+  {
+    name: "ask",
+    aliases: ["?", "assist"],
+    usage: "ask <what you want to do>",
+    summary: "Describe a task in plain words; AI suggests commands",
+    run: async ({ args, user }) => {
+      const prompt = args.join(" ");
+      if (!prompt) return [t('Usage: ask move 200 dollars into my savings', "error")];
+      const res = await suggestCommands({ data: { prompt, role: user.role } });
+      if (!res.ok) return [t(res.error, "error")];
+      return [
+        t(res.summary, "muted"),
+        ...(res.suggestions.length
+          ? res.suggestions.map<Line>((s) => ({ kind: "suggest", ...s }))
+          : [t("No matching commands for your role.", "warn")]),
+        ...(res.suggestions.length ? [t("Click a suggestion to load it, review it, then press Enter. Changes still ask you to confirm.", "muted")] : []),
+      ];
     },
   },
   { name: "clear", aliases: ["cls"], usage: "clear", summary: "Clear the screen", run: ({ clear }) => (clear(), []) },
