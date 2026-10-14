@@ -20,7 +20,7 @@ const schema = z.object({
 });
 
 export const suggestCommands = createServerFn({ method: "POST" })
-  .inputValidator((input: { prompt: string; role: Role }) => {
+  .validator((input: { prompt: string; role: Role }) => {
     const prompt = String(input.prompt ?? "").trim().slice(0, 500);
     if (!prompt) throw new Error("Describe what you want to do.");
     if (!["customer", "bank_admin", "system_admin"].includes(input.role)) throw new Error("Invalid role");
