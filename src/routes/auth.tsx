@@ -5,6 +5,20 @@ import { DEMO_CREDENTIALS } from "@/lib/mock/seed";
 import { Brand } from "@/components/brand";
 import { Icon } from "@/components/icons";
 import { toast } from "sonner";
+import { CommandLineProvider, useCommandLine } from "@/components/command-line";
+
+function CliLoginButton() {
+  const cli = useCommandLine();
+  return (
+    <button
+      type="button"
+      onClick={cli.open}
+      className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 font-mono text-sm font-medium text-foreground transition-colors hover:bg-muted"
+    >
+      {">_"} Sign in with command line
+    </button>
+  );
+}
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -159,6 +173,7 @@ function AuthPage() {
               <Icon name="shield" className="size-4 text-muted-foreground" />
               Continue with SSO
             </button>
+            <CliLoginButton />
           </form>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
