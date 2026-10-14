@@ -5,6 +5,8 @@ import { DEMO_CREDENTIALS } from "@/lib/mock/seed";
 import { Brand } from "@/components/brand";
 import { Icon } from "@/components/icons";
 import { toast } from "sonner";
+import { MfaStep } from "@/components/mfa-step";
+import type { MfaChallenge } from "@/lib/auth/mock-auth";
 import { CommandLineProvider, useCommandLine } from "@/components/command-line";
 
 function CliLoginButton() {
@@ -34,7 +36,8 @@ export const Route = createFileRoute("/auth")({
 });
 
 function AuthPage() {
-  const { signIn } = useAuth();
+  const { startSignIn } = useAuth();
+  const [challenge, setChallenge] = useState<MfaChallenge | null>(null);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,9 +49,7 @@ function AuthPage() {
     setError(null);
     setLoading(true);
     try {
-      await signIn(email, password);
-      toast.success("Signed in");
-      navigate({ to: "/dashboard", replace: true });
+      setChallenge(await startSignIn(email, password));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to sign in.");
     } finally {
@@ -60,6 +61,19 @@ function AuthPage() {
     setEmail(e);
     setPassword("demo1234");
   }
+
+  if (challenge)
+    return (
+      <MfaStep
+        challenge={challenge}
+        onChallenge={setChallenge}
+        onCancel={() => setChallenge(null)}
+        onDone={() => {
+          toast.success("Signed in");
+          navigate({ to: "/dashboard", replace: true });
+        }}
+      />
+    );
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
