@@ -32,7 +32,19 @@ export function CommandLineProvider({ children }: { children: ReactNode }) {
 
 const toneCls = { muted: "text-muted-foreground", ok: "text-success", warn: "text-warn", error: "text-destructive" } as const;
 
-function OutputLine({ line, onLink }: { line: Line; onLink: () => void }) {
+function OutputLine({ line, onLink, onPick }: { line: Line; onLink: () => void; onPick: (cmd: string) => void }) {
+  if (line.kind === "suggest")
+    return (
+      <button onClick={() => onPick(line.command)} className="my-1 block w-full max-w-2xl border border-border px-3 py-2 text-left hover:border-foreground">
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-foreground">$ {line.command}</span>
+          <span className={`shrink-0 text-[10px] uppercase tracking-wider ${line.changesData ? "text-warn" : "text-success"}`}>
+            {line.changesData ? "changes data · confirm" : "read only"}
+          </span>
+        </div>
+        <div className="mt-0.5 text-muted-foreground">{line.explanation}</div>
+      </button>
+    );
   if (line.kind === "link")
     return <Link to={line.to} onClick={onLink} className="block text-primary underline underline-offset-2 hover:text-foreground">↳ {line.text}</Link>;
   if (line.kind === "table")
@@ -52,7 +64,7 @@ function Terminal({ onClose }: { onClose: () => void }) {
   const [loginEmail, setLoginEmail] = useState<string | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [entries, setEntries] = useState<Entry[]>([{ lines: [{ kind: "text", text: 'Vantage CLI — type "help" to see what you can do.', tone: "muted" }] }]);
+  const [entries, setEntries] = useState<Entry[]>([{ lines: [{ kind: "text", text: 'Vantage CLI — type "help", or "ask" + a plain-language task.', tone: "muted" }] }]);
   const [value, setValue] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [hIdx, setHIdx] = useState(-1);
@@ -178,7 +190,7 @@ function Terminal({ onClose }: { onClose: () => void }) {
         {entries.map((e, i) => (
           <div key={i} className="mb-1">
             {e.prompt !== undefined && <div><span className="text-primary">{prompt}</span> <span className="text-foreground">{e.prompt}</span></div>}
-            {e.lines.map((l, j) => <OutputLine key={j} line={l} onLink={onClose} />)}
+            {e.lines.map((l, j) => <OutputLine key={j} line={l} onLink={onClose} onPick={(c) => { setValue(c); inputRef.current?.focus(); }} />)}
           </div>
         ))}
         {busy && <div className="text-muted-foreground">…</div>}
