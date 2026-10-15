@@ -101,7 +101,9 @@ function CustomerDashboard() {
                     {formatCurrency(a.balance, a.currency)}
                   </p>
                   <StatusPill
-                    tone={a.status === "active" ? "success" : a.status === "frozen" ? "danger" : "warn"}
+                    tone={
+                      a.status === "active" ? "success" : a.status === "frozen" ? "danger" : "warn"
+                    }
                     label={a.status}
                   />
                 </div>
@@ -284,7 +286,11 @@ function SystemAdminDashboard() {
                     {s.region} · {s.latencyMs}ms · depth {s.depth}
                   </p>
                 </div>
-                <StatusPill tone={svcTone[s.status]} label={SERVICE_STATUS_LABELS[s.status]} live={s.status !== "healthy"} />
+                <StatusPill
+                  tone={svcTone[s.status]}
+                  label={SERVICE_STATUS_LABELS[s.status]}
+                  live={s.status !== "healthy"}
+                />
               </li>
             ))}
           </ul>

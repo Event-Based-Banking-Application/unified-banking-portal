@@ -23,7 +23,7 @@ export function EventFeed({ limit }: { limit?: number }) {
     queryKey: ["events"],
     queryFn: () => api.getEvents(),
   });
-  const rows = limit ? (data ?? []).slice(0, limit) : data ?? [];
+  const rows = limit ? (data ?? []).slice(0, limit) : (data ?? []);
   if (isLoading) return <EventFeedSkeleton />;
   return (
     <ul className="divide-y divide-border font-mono text-[12.5px]">
@@ -32,9 +32,7 @@ export function EventFeed({ limit }: { limit?: number }) {
           key={ev.id}
           className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-muted/40"
         >
-          <span className="shrink-0 text-muted-foreground">
-            {formatDateTime(ev.timestamp)}
-          </span>
+          <span className="shrink-0 text-muted-foreground">{formatDateTime(ev.timestamp)}</span>
           <span className="shrink-0">
             <StatusPill tone={levelTone[ev.level]} label={levelLabel[ev.level]} />
           </span>

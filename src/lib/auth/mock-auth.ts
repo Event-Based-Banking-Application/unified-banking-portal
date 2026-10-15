@@ -44,10 +44,23 @@ interface ChallengeState extends MfaChallenge {
 }
 
 /** Admin roles need two factors, shorter codes life, fewer attempts and shorter sessions. */
-export const MFA_POLICY: Record<Role, { factors: MfaMethod[]; codeTtlMs: number; attempts: number; sessionMs: number }> = {
+export const MFA_POLICY: Record<
+  Role,
+  { factors: MfaMethod[]; codeTtlMs: number; attempts: number; sessionMs: number }
+> = {
   customer: { factors: ["email_otp"], codeTtlMs: 5 * 60_000, attempts: 5, sessionMs: 8 * 3600_000 },
-  bank_admin: { factors: ["totp", "email_otp"], codeTtlMs: 2 * 60_000, attempts: 3, sessionMs: 2 * 3600_000 },
-  system_admin: { factors: ["totp", "email_otp"], codeTtlMs: 2 * 60_000, attempts: 3, sessionMs: 2 * 3600_000 },
+  bank_admin: {
+    factors: ["totp", "email_otp"],
+    codeTtlMs: 2 * 60_000,
+    attempts: 3,
+    sessionMs: 2 * 3600_000,
+  },
+  system_admin: {
+    factors: ["totp", "email_otp"],
+    codeTtlMs: 2 * 60_000,
+    attempts: 3,
+    sessionMs: 2 * 3600_000,
+  },
 };
 
 const challenges = new Map<string, ChallengeState>();
@@ -69,7 +82,10 @@ function publicChallenge(c: ChallengeState): MfaChallenge {
   return pub;
 }
 
-function issueFactor(c: Omit<ChallengeState, "method" | "code" | "demoCode" | "expiresAt" | "maskedDestination">, method: MfaMethod): ChallengeState {
+function issueFactor(
+  c: Omit<ChallengeState, "method" | "code" | "demoCode" | "expiresAt" | "maskedDestination">,
+  method: MfaMethod,
+): ChallengeState {
   const code = newCode();
   return {
     ...c,
@@ -87,7 +103,9 @@ export async function startSignIn(email: string, password: string): Promise<MfaC
   const user = db.findUserByEmail(email);
   const lock = lockedUntil.get(email.toLowerCase());
   if (lock && lock > Date.now()) {
-    throw new Error(`Too many failed codes. Try again in ${Math.ceil((lock - Date.now()) / 60000)} min.`);
+    throw new Error(
+      `Too many failed codes. Try again in ${Math.ceil((lock - Date.now()) / 60000)} min.`,
+    );
   }
   // In mock mode any non-empty password works for seeded users.
   if (!user || !password) throw new Error("Invalid email or password");
@@ -128,7 +146,10 @@ export async function verifyMfa(
     c.attemptsLeft -= 1;
     if (c.attemptsLeft <= 0) {
       challenges.delete(challengeId);
-      lockedUntil.set(c.email.toLowerCase(), Date.now() + (c.role === "customer" ? 5 : 15) * 60_000);
+      lockedUntil.set(
+        c.email.toLowerCase(),
+        Date.now() + (c.role === "customer" ? 5 : 15) * 60_000,
+      );
       db.addAudit({
         id: `au-${crypto.randomUUID().slice(0, 6)}`,
         actor: c.email,
@@ -139,12 +160,23 @@ export async function verifyMfa(
       });
       throw new Error("Too many wrong codes. Account temporarily locked.");
     }
-    throw new Error(`Incorrect code. ${c.attemptsLeft} attempt${c.attemptsLeft === 1 ? "" : "s"} left.`);
+    throw new Error(
+      `Incorrect code. ${c.attemptsLeft} attempt${c.attemptsLeft === 1 ? "" : "s"} left.`,
+    );
   }
   challenges.delete(challengeId);
   const [next, ...rest] = c.remaining;
   if (next) {
-    const n = issueFactor({ ...c, id: crypto.randomUUID(), step: c.step + 1, remaining: rest, attemptsLeft: MFA_POLICY[c.role].attempts }, next);
+    const n = issueFactor(
+      {
+        ...c,
+        id: crypto.randomUUID(),
+        step: c.step + 1,
+        remaining: rest,
+        attemptsLeft: MFA_POLICY[c.role].attempts,
+      },
+      next,
+    );
     challenges.set(n.id, n);
     return { done: false, challenge: publicChallenge(n) };
   }
@@ -159,7 +191,11 @@ export async function verifyMfa(
   };
   const now = Date.now();
   const session: AuthSession = {
-    token: encodeToken({ sub: sessionUser.id, role: sessionUser.role, amr: ["pwd", ...MFA_POLICY[c.role].factors] }),
+    token: encodeToken({
+      sub: sessionUser.id,
+      role: sessionUser.role,
+      amr: ["pwd", ...MFA_POLICY[c.role].factors],
+    }),
     user: sessionUser,
     issuedAt: now,
     expiresAt: now + MFA_POLICY[c.role].sessionMs,

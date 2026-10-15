@@ -5,13 +5,11 @@ import { api } from "@/lib/mock/api";
 import { formatCurrency, formatDateTime, maskedAccount } from "@/lib/format";
 import { NAV_GROUPS } from "@/lib/nav";
 import type { MockAccount, RequestType } from "@/lib/mock/types";
-import { suggestCommands } from "./assist.functions";
 
 export type Line =
   | { kind: "text"; text: string; tone?: "muted" | "ok" | "warn" | "error" }
   | { kind: "table"; head: string[]; rows: string[][] }
-  | { kind: "link"; text: string; to: string }
-  | { kind: "suggest"; command: string; explanation: string; changesData: boolean };
+  | { kind: "link"; text: string; to: string };
 
 export interface Ctx {
   user: SessionUser;
@@ -42,7 +40,8 @@ const t = (text: string, tone?: "muted" | "ok" | "warn" | "error"): Line => ({
 
 /** Split input respecting quotes; extract --flag value pairs. */
 export function parse(input: string) {
-  const tokens = input.match(/"[^"]*"|'[^']*'|\S+/g)?.map((s) => s.replace(/^["']|["']$/g, "")) ?? [];
+  const tokens =
+    input.match(/"[^"]*"|'[^']*'|\S+/g)?.map((s) => s.replace(/^["']|["']$/g, "")) ?? [];
   const args: string[] = [];
   const flags: Record<string, string | true> = {};
   for (let i = 0; i < tokens.length; i++) {
@@ -91,12 +90,20 @@ export const COMMANDS: Command[] = [
       if (args[0]) {
         const c = resolve(args.join(" "))?.cmd;
         if (!c) return [t(`No command "${args[0]}".`, "error")];
-        return [t(c.usage, "ok"), t(c.summary, "muted"), ...(c.aliases?.length ? [t(`aliases: ${c.aliases.join(", ")}`, "muted")] : [])];
+        return [
+          t(c.usage, "ok"),
+          t(c.summary, "muted"),
+          ...(c.aliases?.length ? [t(`aliases: ${c.aliases.join(", ")}`, "muted")] : []),
+        ];
       }
       return [
         t(`Commands available to ${ROLE_LABELS[user.role]}:`, "muted"),
-        { kind: "table", head: ["Command", "What it does"], rows: mine.map((c) => [c.usage, c.summary]) },
-        t('Tip: Tab autocompletes, ↑/↓ browse history, Esc closes.', "muted"),
+        {
+          kind: "table",
+          head: ["Command", "What it does"],
+          rows: mine.map((c) => [c.usage, c.summary]),
+        },
+        t("Tip: Tab autocompletes, ↑/↓ browse history, Esc closes.", "muted"),
       ];
     },
   },
@@ -117,39 +124,33 @@ export const COMMANDS: Command[] = [
     summary: "Open a page, e.g. go accounts",
     run: ({ args, user, navigate }) => {
       const key = args.join("-").toLowerCase();
-      const pages = NAV_GROUPS.flatMap((g) => g.items).filter((i) => user.permissions.includes(i.permission));
+      const pages = NAV_GROUPS.flatMap((g) => g.items).filter((i) =>
+        user.permissions.includes(i.permission),
+      );
       const to = PAGE_ALIASES[key];
       if (!to || !pages.some((p) => p.to === to))
-        return [t(`Unknown page "${key}". Try: ${pages.map((p) => p.to.slice(1)).join(", ")}`, "error")];
+        return [
+          t(`Unknown page "${key}". Try: ${pages.map((p) => p.to.slice(1)).join(", ")}`, "error"),
+        ];
       navigate(to);
       return [t(`→ ${to}`, "ok")];
     },
   },
   {
-    name: "ask",
-    aliases: ["?", "assist"],
-    usage: "ask <what you want to do>",
-    summary: "Describe a task in plain words; AI suggests commands",
-    run: async ({ args, user }) => {
-      const prompt = args.join(" ");
-      if (!prompt) return [t('Usage: ask move 200 dollars into my savings', "error")];
-      const res = await suggestCommands({ data: { prompt, role: user.role } });
-      if (!res.ok) return [t(res.error, "error")];
-      return [
-        t(res.summary, "muted"),
-        ...(res.suggestions.length
-          ? res.suggestions.map<Line>((s) => ({ kind: "suggest", ...s }))
-          : [t("No matching commands for your role.", "warn")]),
-        ...(res.suggestions.length ? [t("Click a suggestion to load it, review it, then press Enter. Changes still ask you to confirm.", "muted")] : []),
-      ];
-    },
+    name: "clear",
+    aliases: ["cls"],
+    usage: "clear",
+    summary: "Clear the screen",
+    run: ({ clear }) => (clear(), []),
   },
-  { name: "clear", aliases: ["cls"], usage: "clear", summary: "Clear the screen", run: ({ clear }) => (clear(), []) },
   {
     name: "history",
     usage: "history",
     summary: "Show commands you ran",
-    run: ({ history }) => (history.length ? history.map((h, i) => t(`${String(i + 1).padStart(3)}  ${h}`)) : [t("No history yet.", "muted")]),
+    run: ({ history }) =>
+      history.length
+        ? history.map((h, i) => t(`${String(i + 1).padStart(3)}  ${h}`))
+        : [t("No history yet.", "muted")],
   },
   {
     name: "logout",
@@ -169,7 +170,15 @@ export const COMMANDS: Command[] = [
       const list = await api.getAccounts(user.id);
       const total = list.reduce((s, a) => s + a.balance, 0);
       return [
-        { kind: "table", head: ["Account", "Number", "Balance"], rows: list.map((a) => [a.name, maskedAccount(a.number), formatCurrency(a.balance, a.currency)]) },
+        {
+          kind: "table",
+          head: ["Account", "Number", "Balance"],
+          rows: list.map((a) => [
+            a.name,
+            maskedAccount(a.number),
+            formatCurrency(a.balance, a.currency),
+          ]),
+        },
         t(`Total: ${formatCurrency(total, list[0]?.currency ?? "USD")}`, "ok"),
       ];
     },
@@ -180,10 +189,26 @@ export const COMMANDS: Command[] = [
     summary: "List accounts",
     permission: "accounts:read",
     run: async ({ user }) => {
-      const list = await api.getAccounts(user.permissions.includes("accounts:read:all") ? undefined : user.id);
+      const list = await api.getAccounts(
+        user.permissions.includes("accounts:read:all") ? undefined : user.id,
+      );
       return [
-        { kind: "table", head: ["Id", "Name", "Type", "Status", "Balance"], rows: list.map((a) => [a.id, a.name, a.type, a.status, formatCurrency(a.balance, a.currency)]) },
-        ...list.map((a) => ({ kind: "link" as const, text: `open ${a.name}`, to: `/accounts/${a.id}` })),
+        {
+          kind: "table",
+          head: ["Id", "Name", "Type", "Status", "Balance"],
+          rows: list.map((a) => [
+            a.id,
+            a.name,
+            a.type,
+            a.status,
+            formatCurrency(a.balance, a.currency),
+          ]),
+        },
+        ...list.map((a) => ({
+          kind: "link" as const,
+          text: `open ${a.name}`,
+          to: `/accounts/${a.id}`,
+        })),
       ];
     },
   },
@@ -198,9 +223,22 @@ export const COMMANDS: Command[] = [
       const acct = findAccount(accts, args[0]);
       if (args[0] && !acct) return [t(`No account matching "${args[0]}".`, "error")];
       const ids = new Set(accts.map((a) => a.id));
-      const txs = (await api.getTransactions(acct?.id)).filter((x) => ids.has(x.accountId)).slice(0, 15);
+      const txs = (await api.getTransactions(acct?.id))
+        .filter((x) => ids.has(x.accountId))
+        .slice(0, 15);
       if (!txs.length) return [t("No transactions.", "muted")];
-      return [{ kind: "table", head: ["Date", "Description", "Counterparty", "Amount"], rows: txs.map((x) => [formatDateTime(x.createdAt), x.description, x.counterparty, `${x.direction === "debit" ? "−" : "+"}${formatCurrency(x.amount, x.currency)}`]) }];
+      return [
+        {
+          kind: "table",
+          head: ["Date", "Description", "Counterparty", "Amount"],
+          rows: txs.map((x) => [
+            formatDateTime(x.createdAt),
+            x.description,
+            x.counterparty,
+            `${x.direction === "debit" ? "−" : "+"}${formatCurrency(x.amount, x.currency)}`,
+          ]),
+        },
+      ];
     },
   },
   {
@@ -211,20 +249,36 @@ export const COMMANDS: Command[] = [
     permission: "accounts:transfer",
     run: async ({ user, args, flags, confirm, queryClient }) => {
       const amount = Number(args[0]);
-      const fromI = args.indexOf("from"), toI = args.indexOf("to"), noteI = args.indexOf("note");
+      const fromI = args.indexOf("from"),
+        toI = args.indexOf("to"),
+        noteI = args.indexOf("note");
       if (!amount || amount <= 0 || fromI < 0 || toI < 0)
         return [t('Usage: transfer 250 from checking to savings note "rent"', "error")];
       const accts = await api.getAccounts(user.id);
       const from = findAccount(accts, args.slice(fromI + 1, toI).join(" "));
       const to = findAccount(accts, args.slice(toI + 1, noteI > 0 ? noteI : undefined).join(" "));
-      if (!from || !to) return [t(`Couldn't find ${!from ? "source" : "destination"} account. Run "accounts" to see names.`, "error")];
+      if (!from || !to)
+        return [
+          t(
+            `Couldn't find ${!from ? "source" : "destination"} account. Run "accounts" to see names.`,
+            "error",
+          ),
+        ];
       if (from.id === to.id) return [t("Source and destination must differ.", "error")];
-      const memo = noteI > 0 ? args.slice(noteI + 1).join(" ") : typeof flags["note"] === "string" ? flags["note"] : "CLI transfer";
-      return confirm(`Transfer ${formatCurrency(amount, from.currency)} from ${from.name} to ${to.name}?`, async () => {
-        const tx = await api.transfer(from.id, to.id, amount, memo);
-        invalidate(queryClient);
-        return [t(`✓ Transfer settled (${tx.id}).`, "ok")];
-      });
+      const memo =
+        noteI > 0
+          ? args.slice(noteI + 1).join(" ")
+          : typeof flags["note"] === "string"
+            ? flags["note"]
+            : "CLI transfer";
+      return confirm(
+        `Transfer ${formatCurrency(amount, from.currency)} from ${from.name} to ${to.name}?`,
+        async () => {
+          const tx = await api.transfer(from.id, to.id, amount, memo);
+          invalidate(queryClient);
+          return [t(`✓ Transfer settled (${tx.id}).`, "ok")];
+        },
+      );
     },
   },
   {
@@ -235,12 +289,33 @@ export const COMMANDS: Command[] = [
     run: async ({ user, args, confirm, queryClient }) => {
       const [kind, ...rest] = args;
       let type: RequestType, details: string, amount: number | undefined;
-      if (kind === "account") { type = "new_account"; details = `Open ${rest[0] ?? "savings"} account`; }
-      else if (kind === "card-limit" || kind === "limit") { type = "card_limit"; amount = Number(rest[0]); if (!amount) return [t("Usage: request card-limit 5000", "error")]; details = `Raise card limit to ${amount}`; }
-      else if (kind === "user") { type = "new_user"; if (rest.length < 2) return [t('Usage: request user "Jane Doe" jane@mail.com', "error")]; details = `Add user ${rest[0]} (${rest[1]})`; }
-      else return [t("Usage: request account savings | request card-limit 5000 | request user \"Name\" email", "error")];
+      if (kind === "account") {
+        type = "new_account";
+        details = `Open ${rest[0] ?? "savings"} account`;
+      } else if (kind === "card-limit" || kind === "limit") {
+        type = "card_limit";
+        amount = Number(rest[0]);
+        if (!amount) return [t("Usage: request card-limit 5000", "error")];
+        details = `Raise card limit to ${amount}`;
+      } else if (kind === "user") {
+        type = "new_user";
+        if (rest.length < 2) return [t('Usage: request user "Jane Doe" jane@mail.com', "error")];
+        details = `Add user ${rest[0]} (${rest[1]})`;
+      } else
+        return [
+          t(
+            'Usage: request account savings | request card-limit 5000 | request user "Name" email',
+            "error",
+          ),
+        ];
       return confirm(`Raise request: ${details}?`, async () => {
-        const r = await api.createRequest({ requesterId: user.id, requesterName: user.name, type, details, ...(amount !== undefined ? { amount } : {}) });
+        const r = await api.createRequest({
+          requesterId: user.id,
+          requesterName: user.name,
+          type,
+          details,
+          ...(amount !== undefined ? { amount } : {}),
+        });
         invalidate(queryClient);
         return [t(`✓ Request ${r.id} submitted — awaiting bank approval.`, "ok")];
       });
@@ -255,7 +330,13 @@ export const COMMANDS: Command[] = [
     run: async ({ user }) => {
       const list = await api.getRequests(user.id);
       if (!list.length) return [t("No requests yet.", "muted")];
-      return [{ kind: "table", head: ["Id", "Type", "Details", "Status"], rows: list.map((r) => [r.id, r.type, r.details, r.status.toUpperCase()]) }];
+      return [
+        {
+          kind: "table",
+          head: ["Id", "Type", "Details", "Status"],
+          rows: list.map((r) => [r.id, r.type, r.details, r.status.toUpperCase()]),
+        },
+      ];
     },
   },
 
@@ -269,7 +350,14 @@ export const COMMANDS: Command[] = [
     run: async () => {
       const list = (await api.getRequests()).filter((r) => r.status === "pending");
       if (!list.length) return [t("Queue is empty.", "ok")];
-      return [{ kind: "table", head: ["Id", "Type", "Requester", "Details"], rows: list.map((r) => [r.id, r.type, r.requesterName, r.details]) }, t('Run "approve <id>" or "reject <id>".', "muted")];
+      return [
+        {
+          kind: "table",
+          head: ["Id", "Type", "Requester", "Details"],
+          rows: list.map((r) => [r.id, r.type, r.requesterName, r.details]),
+        },
+        t('Run "approve <id>" or "reject <id>".', "muted"),
+      ];
     },
   },
   ...(["approve", "reject"] as const).map<Command>((verb) => ({
@@ -283,11 +371,14 @@ export const COMMANDS: Command[] = [
       const req = (await api.getRequests()).find((r) => r.id.toLowerCase() === id.toLowerCase());
       if (!req) return [t(`Request ${id} not found. Run "pending".`, "error")];
       if (req.status !== "pending") return [t(`${req.id} is already ${req.status}.`, "warn")];
-      return confirm(`${verb === "approve" ? "Approve" : "Reject"} ${req.id} (${req.details}) from ${req.requesterName}?`, async () => {
-        await api.resolveRequest(req.id, verb === "approve" ? "approved" : "rejected", user.name);
-        invalidate(queryClient);
-        return [t(`✓ ${req.id} ${verb === "approve" ? "approved" : "rejected"}.`, "ok")];
-      });
+      return confirm(
+        `${verb === "approve" ? "Approve" : "Reject"} ${req.id} (${req.details}) from ${req.requesterName}?`,
+        async () => {
+          await api.resolveRequest(req.id, verb === "approve" ? "approved" : "rejected", user.name);
+          invalidate(queryClient);
+          return [t(`✓ ${req.id} ${verb === "approve" ? "approved" : "rejected"}.`, "ok")];
+        },
+      );
     },
   })),
   {
@@ -297,7 +388,13 @@ export const COMMANDS: Command[] = [
     permission: "users:read",
     run: async () => {
       const list = await api.getCustomers();
-      return [{ kind: "table", head: ["Name", "Email", "Status"], rows: list.map((u) => [u.name, u.email, u.status.toUpperCase()]) }];
+      return [
+        {
+          kind: "table",
+          head: ["Name", "Email", "Status"],
+          rows: list.map((u) => [u.name, u.email, u.status.toUpperCase()]),
+        },
+      ];
     },
   },
   ...(["suspend", "activate"] as const).map<Command>((verb) => ({
@@ -308,7 +405,9 @@ export const COMMANDS: Command[] = [
     run: async ({ args, confirm, queryClient }) => {
       const email = args[0]?.toLowerCase();
       if (!email) return [t(`Usage: ${verb} theo@example.com`, "error")];
-      const u = [...(await api.getCustomers()), ...(await api.getBankUsers())].find((x) => x.email.toLowerCase() === email || x.name.toLowerCase().startsWith(email));
+      const u = [...(await api.getCustomers()), ...(await api.getBankUsers())].find(
+        (x) => x.email.toLowerCase() === email || x.name.toLowerCase().startsWith(email),
+      );
       if (!u) return [t(`No user matching "${email}".`, "error")];
       return confirm(`${verb === "suspend" ? "Suspend" : "Activate"} ${u.name}?`, async () => {
         await api.setUserStatus(u.id, verb === "suspend" ? "suspended" : "active");
@@ -324,7 +423,13 @@ export const COMMANDS: Command[] = [
     permission: "bankusers:manage",
     run: async () => {
       const list = await api.getBankUsers();
-      return [{ kind: "table", head: ["Name", "Email", "Role", "Status"], rows: list.map((u) => [u.name, u.email, ROLE_LABELS[u.role], u.status.toUpperCase()]) }];
+      return [
+        {
+          kind: "table",
+          head: ["Name", "Email", "Role", "Status"],
+          rows: list.map((u) => [u.name, u.email, ROLE_LABELS[u.role], u.status.toUpperCase()]),
+        },
+      ];
     },
   },
 
@@ -339,8 +444,16 @@ export const COMMANDS: Command[] = [
       const list = await api.getServices();
       const bad = list.filter((s) => s.status !== "healthy");
       return [
-        t(`${list.length - bad.length}/${list.length} services healthy`, bad.length ? "warn" : "ok"),
-        ...bad.map((s) => t(`  ! ${s.name} is ${s.status} (${s.latencyMs}ms, depth ${s.depth})`, s.status === "alert" ? "error" : "warn")),
+        t(
+          `${list.length - bad.length}/${list.length} services healthy`,
+          bad.length ? "warn" : "ok",
+        ),
+        ...bad.map((s) =>
+          t(
+            `  ! ${s.name} is ${s.status} (${s.latencyMs}ms, depth ${s.depth})`,
+            s.status === "alert" ? "error" : "warn",
+          ),
+        ),
       ];
     },
   },
@@ -351,7 +464,20 @@ export const COMMANDS: Command[] = [
     permission: "infra:read",
     run: async () => {
       const list = await api.getServices();
-      return [{ kind: "table", head: ["Service", "Region", "Status", "Latency", "Depth", "Uptime"], rows: list.map((s) => [s.name, s.region, s.status.toUpperCase(), `${s.latencyMs}ms`, String(s.depth), `${s.uptimePct}%`]) }];
+      return [
+        {
+          kind: "table",
+          head: ["Service", "Region", "Status", "Latency", "Depth", "Uptime"],
+          rows: list.map((s) => [
+            s.name,
+            s.region,
+            s.status.toUpperCase(),
+            `${s.latencyMs}ms`,
+            String(s.depth),
+            `${s.uptimePct}%`,
+          ]),
+        },
+      ];
     },
   },
   {
@@ -364,7 +490,15 @@ export const COMMANDS: Command[] = [
       let list = await api.getEvents();
       if (typeof flags["level"] === "string") list = list.filter((e) => e.level === flags["level"]);
       if (!list.length) return [t("No events.", "muted")];
-      return [{ kind: "table", head: ["Time", "Level", "Type", "Message"], rows: list.slice(0, 20).map((e) => [formatDateTime(e.timestamp), e.level.toUpperCase(), e.type, e.message]) }];
+      return [
+        {
+          kind: "table",
+          head: ["Time", "Level", "Type", "Message"],
+          rows: list
+            .slice(0, 20)
+            .map((e) => [formatDateTime(e.timestamp), e.level.toUpperCase(), e.type, e.message]),
+        },
+      ];
     },
   },
   {
@@ -375,7 +509,13 @@ export const COMMANDS: Command[] = [
     run: async ({ flags }) => {
       const n = Number(flags["last"]) || 10;
       const list = (await api.getAudit()).slice(0, n);
-      return [{ kind: "table", head: ["Time", "Actor", "Action", "Detail"], rows: list.map((a) => [formatDateTime(a.timestamp), a.actor, a.action, a.detail]) }];
+      return [
+        {
+          kind: "table",
+          head: ["Time", "Actor", "Action", "Detail"],
+          rows: list.map((a) => [formatDateTime(a.timestamp), a.actor, a.action, a.detail]),
+        },
+      ];
     },
   },
 ];

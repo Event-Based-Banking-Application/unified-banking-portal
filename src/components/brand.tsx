@@ -14,9 +14,7 @@ export function Brand({
       </div>
       {showWordmark && (
         <div className="leading-none">
-          <p className={`${text} font-display leading-none text-foreground`}>
-            VANTAGE
-          </p>
+          <p className={`${text} font-display leading-none text-foreground`}>VANTAGE</p>
           <p className="eyebrow mt-1 text-muted-foreground">event banking</p>
         </div>
       )}

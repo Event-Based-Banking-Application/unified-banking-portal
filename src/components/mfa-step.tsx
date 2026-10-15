@@ -24,7 +24,10 @@ export function MfaStep({
     const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);
   }, []);
-  useEffect(() => { setCode(""); setError(null); }, [challenge.id]);
+  useEffect(() => {
+    setCode("");
+    setError(null);
+  }, [challenge.id]);
 
   const secs = Math.max(0, Math.round((challenge.expiresAt - now) / 1000));
   const admin = challenge.role !== "customer";
@@ -61,7 +64,8 @@ export function MfaStep({
         </p>
         {admin && (
           <p className="mt-3 border border-warn/40 bg-warn/10 px-3 py-2 text-[12px] text-foreground">
-            Admin accounts need two factors (authenticator app + email), codes expire in 2 minutes, and 3 wrong tries lock the account for 15 minutes.
+            Admin accounts need two factors (authenticator app + email), codes expire in 2 minutes,
+            and 3 wrong tries lock the account for 15 minutes.
           </p>
         )}
         <form onSubmit={submit} className="mt-5 space-y-3">
@@ -81,16 +85,30 @@ export function MfaStep({
             disabled={loading || code.length !== 6 || secs === 0}
             className="w-full bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground disabled:opacity-50"
           >
-            {loading ? "Verifying…" : challenge.step < challenge.totalSteps ? "Verify & continue" : "Verify & sign in"}
+            {loading
+              ? "Verifying…"
+              : challenge.step < challenge.totalSteps
+                ? "Verify & continue"
+                : "Verify & sign in"}
           </button>
         </form>
         <div className="mt-3 flex items-center justify-between text-[12px] text-muted-foreground">
-          <span className="font-mono">{secs > 0 ? `Expires in ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}` : "Code expired"}</span>
+          <span className="font-mono">
+            {secs > 0
+              ? `Expires in ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`
+              : "Code expired"}
+          </span>
           <div className="flex gap-3">
-            <button type="button" onClick={async () => onChallenge(await resendMfa(challenge.id))} className="hover:text-foreground">
+            <button
+              type="button"
+              onClick={async () => onChallenge(await resendMfa(challenge.id))}
+              className="hover:text-foreground"
+            >
               {isTotp ? "Refresh code" : "Resend code"}
             </button>
-            <button type="button" onClick={onCancel} className="hover:text-foreground">Cancel</button>
+            <button type="button" onClick={onCancel} className="hover:text-foreground">
+              Cancel
+            </button>
           </div>
         </div>
         <p className="mt-6 border border-dashed border-border px-3 py-2 font-mono text-[12px] text-muted-foreground">

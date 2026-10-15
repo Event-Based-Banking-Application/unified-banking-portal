@@ -32,20 +32,13 @@ export function StatCard({
             ? "bg-info"
             : "bg-primary";
   return (
-    <div
-      className={cn(
-        "panel-in border border-border bg-card p-4",
-        className,
-      )}
-    >
+    <div className={cn("panel-in border border-border bg-card p-4", className)}>
       <div className="flex items-center justify-between">
         <span className="eyebrow text-muted-foreground">{label}</span>
         {icon}
       </div>
       <div className="mt-2 flex items-end justify-between gap-2">
-        <p className="font-display text-[34px] leading-none tracking-tight tabular-nums">
-          {value}
-        </p>
+        <p className="font-display text-[34px] leading-none tracking-tight tabular-nums">{value}</p>
         {live && <StatusPill tone="info" label="LIVE" live />}
       </div>
       {sub && <p className="font-editorial mt-2 text-[13px] text-muted-foreground">{sub}</p>}
@@ -57,7 +50,6 @@ export function StatCard({
           />
         </div>
       )}
-
     </div>
   );
 }

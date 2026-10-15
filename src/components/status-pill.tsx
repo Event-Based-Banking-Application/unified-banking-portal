@@ -37,9 +37,7 @@ export function StatusPill({
         className,
       )}
     >
-      <span
-        className={cn("size-1.5", dotClasses[tone], live && "live-dot")}
-      />
+      <span className={cn("size-1.5", dotClasses[tone], live && "live-dot")} />
       {label}
     </span>
   );

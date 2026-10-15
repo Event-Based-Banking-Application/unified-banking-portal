@@ -24,6 +24,8 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 - **Stay in sync**: every change made in Lovable is committed straight to this repository.
 - **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
+*Note: Lovable AI features (like the `ask` CLI assist and AI request reviews) as well as the Lovable runtime error reporting have been removed from the production build so that the application has zero runtime dependencies on the Lovable platform.*
+
 ## Development
 
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).

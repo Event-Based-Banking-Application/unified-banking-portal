@@ -16,22 +16,30 @@ export interface NavGroupDef {
 export const NAV_GROUPS: NavGroupDef[] = [
   {
     label: "Overview",
-    items: [
-      { label: "Dashboard", to: "/dashboard", permission: "profile:read", icon: "activity" },
-    ],
+    items: [{ label: "Dashboard", to: "/dashboard", permission: "profile:read", icon: "activity" }],
   },
   {
     label: "Customer",
     items: [
       { label: "Accounts", to: "/accounts", permission: "accounts:read", icon: "wallet" },
-      { label: "Transfer", to: "/transfer", permission: "accounts:transfer", icon: "arrow-right-left" },
+      {
+        label: "Transfer",
+        to: "/transfer",
+        permission: "accounts:transfer",
+        icon: "arrow-right-left",
+      },
       { label: "My requests", to: "/requests", permission: "requests:create", icon: "inbox" },
     ],
   },
   {
     label: "Bank Admin",
     items: [
-      { label: "Approvals", to: "/approvals", permission: "requests:approve", icon: "check-square" },
+      {
+        label: "Approvals",
+        to: "/approvals",
+        permission: "requests:approve",
+        icon: "check-square",
+      },
       { label: "Customers", to: "/customers", permission: "users:read", icon: "users" },
       { label: "Bank users", to: "/bank-users", permission: "bankusers:manage", icon: "shield" },
     ],
@@ -46,8 +54,6 @@ export const NAV_GROUPS: NavGroupDef[] = [
   },
   {
     label: "Account",
-    items: [
-      { label: "Profile", to: "/profile", permission: "profile:read", icon: "user" },
-    ],
+    items: [{ label: "Profile", to: "/profile", permission: "profile:read", icon: "user" }],
   },
 ];
