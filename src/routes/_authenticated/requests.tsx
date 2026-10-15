@@ -180,7 +180,9 @@ function RequestsPage() {
                   </td>
                   <td className="px-4 py-3 text-right font-mono text-[11px] text-muted-foreground">
                     {timeAgo(r.createdAt)}
-                    <span className="block text-[10px] opacity-70">{formatDateTime(r.createdAt)}</span>
+                    <span className="block text-[10px] opacity-70">
+                      {formatDateTime(r.createdAt)}
+                    </span>
                   </td>
                 </tr>
               ))}

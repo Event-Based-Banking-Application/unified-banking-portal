@@ -5,10 +5,7 @@ import { PageHeader } from "@/components/page-header";
 import { StatCard } from "@/components/stat-card";
 import { StatusPill } from "@/components/status-pill";
 import { EventFeed } from "@/components/event-feed";
-import {
-  SERVICE_STATUS_LABELS,
-  type ServiceStatus,
-} from "@/lib/mock/types";
+import { SERVICE_STATUS_LABELS, type ServiceStatus } from "@/lib/mock/types";
 
 export const Route = createFileRoute("/_authenticated/console")({
   head: () => ({ meta: [{ title: "Console — Vantage" }] }),
@@ -44,7 +41,11 @@ function ConsolePage() {
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Healthy" value={`${healthy}/${list.length}`} tone="success" live />
         <StatCard label="Avg latency" value={`${avgLatency}ms`} tone="info" />
-        <StatCard label="Queue depth" value={totalDepth} tone={totalDepth > 100 ? "warn" : "muted"} />
+        <StatCard
+          label="Queue depth"
+          value={totalDepth}
+          tone={totalDepth > 100 ? "warn" : "muted"}
+        />
         <StatCard label="Min uptime" value={`${Math.min(...list.map((s) => s.uptimePct), 100)}%`} />
       </div>
 
@@ -68,11 +69,19 @@ function ConsolePage() {
               {list.map((s) => (
                 <tr key={s.id} className="hover:bg-muted/30">
                   <td className="px-4 py-3 font-medium text-foreground">{s.name}</td>
-                  <td className="px-4 py-3 font-mono text-[12px] text-muted-foreground">{s.region}</td>
-                  <td className="px-4 py-3">
-                    <StatusPill tone={svcTone[s.status]} label={SERVICE_STATUS_LABELS[s.status]} live={s.status !== "healthy"} />
+                  <td className="px-4 py-3 font-mono text-[12px] text-muted-foreground">
+                    {s.region}
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-foreground">{s.latencyMs}ms</td>
+                  <td className="px-4 py-3">
+                    <StatusPill
+                      tone={svcTone[s.status]}
+                      label={SERVICE_STATUS_LABELS[s.status]}
+                      live={s.status !== "healthy"}
+                    />
+                  </td>
+                  <td className="px-4 py-3 text-right font-mono text-foreground">
+                    {s.latencyMs}ms
+                  </td>
                   <td className="px-4 py-3 text-right font-mono text-foreground">{s.depth}</td>
                   <td className="px-4 py-3 text-right font-mono text-foreground">{s.uptimePct}%</td>
                 </tr>

@@ -66,14 +66,12 @@ function IndexPage() {
               Event-driven core · live
             </span>
             <h1 className="mt-5 text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-5xl">
-              Banking that runs on{" "}
-              <span className="text-primary">events</span>, not batch jobs.
+              Banking that runs on <span className="text-primary">events</span>, not batch jobs.
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
-              Vantage is an event-driven banking platform. Customers bank, bank
-              admins approve, and system operators watch every event flow
-              through the core — all behind a single login that adapts to your
-              role.
+              Vantage is an event-driven banking platform. Customers bank, bank admins approve, and
+              system operators watch every event flow through the core — all behind a single login
+              that adapts to your role.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -119,8 +117,8 @@ function IndexPage() {
             One login, three roles
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Everyone signs in on the same page. The interface you get is built
-            from your role and permissions.
+            Everyone signs in on the same page. The interface you get is built from your role and
+            permissions.
           </p>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             <RoleCard
@@ -146,12 +144,10 @@ function IndexPage() {
 
         {/* CTA */}
         <section className="rounded-2xl border border-border bg-sidebar px-6 py-10 text-center sm:px-10">
-          <h2 className="text-2xl font-semibold tracking-tight text-foreground">
-            Try the demo
-          </h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-foreground">Try the demo</h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-            Sign in as a customer, bank admin, or system admin — the interface
-            changes with the role. Password for every demo account is{" "}
+            Sign in as a customer, bank admin, or system admin — the interface changes with the
+            role. Password for every demo account is{" "}
             <span className="font-mono text-foreground">demo1234</span>.
           </p>
           <div className="mt-6">

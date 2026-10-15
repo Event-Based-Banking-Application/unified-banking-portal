@@ -17,13 +17,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     "audit:read",
     "profile:read",
   ],
-  system_admin: [
-    "infra:read",
-    "events:read",
-    "audit:read",
-    "users:read",
-    "profile:read",
-  ],
+  system_admin: ["infra:read", "events:read", "audit:read", "users:read", "profile:read"],
 };
 
 export function permissionsFor(role: Role): Permission[] {

@@ -62,13 +62,21 @@ function AccountDetailPage() {
       />
 
       <div className="grid gap-3 sm:grid-cols-3">
-        <StatCard label="Available balance" value={formatCurrency(account.balance, account.currency)} tone="info" />
+        <StatCard
+          label="Available balance"
+          value={formatCurrency(account.balance, account.currency)}
+          tone="info"
+        />
         <StatCard
           label="Status"
-          value={
-            <span className="capitalize">{account.status}</span>
+          value={<span className="capitalize">{account.status}</span>}
+          tone={
+            account.status === "active"
+              ? "success"
+              : account.status === "frozen"
+                ? "danger"
+                : "warn"
           }
-          tone={account.status === "active" ? "success" : account.status === "frozen" ? "danger" : "warn"}
         />
         <StatCard label="Transactions" value={tx.length} />
       </div>
@@ -96,7 +104,13 @@ function AccountDetailPage() {
                   <td className="px-4 py-3 text-muted-foreground">{t.counterparty}</td>
                   <td className="px-4 py-3">
                     <StatusPill
-                      tone={t.status === "settled" ? "success" : t.status === "pending" ? "warn" : "danger"}
+                      tone={
+                        t.status === "settled"
+                          ? "success"
+                          : t.status === "pending"
+                            ? "warn"
+                            : "danger"
+                      }
                       label={t.status}
                     />
                   </td>

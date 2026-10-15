@@ -23,7 +23,7 @@ let users: MockUser[] = [...seedUsers];
 let accounts: MockAccount[] = [...seedAccounts];
 let transactions: MockTransaction[] = [...seedTransactions];
 let requests: MockRequest[] = [...seedRequests];
-let services: MockService[] = [...seedServices];
+const services: MockService[] = [...seedServices];
 let events: MockEvent[] = [...seedEvents];
 let audit: MockAuditEntry[] = [...seedAudit];
 
@@ -60,27 +60,21 @@ export const db = {
     return accounts.find((a) => a.userId === userId && a.name === accountName);
   },
   adjustBalance(accountId: string, delta: number): void {
-    accounts = accounts.map((a) =>
-      a.id === accountId ? { ...a, balance: a.balance + delta } : a,
-    );
+    accounts = accounts.map((a) => (a.id === accountId ? { ...a, balance: a.balance + delta } : a));
   },
 
   listTransactions(accountId?: string): MockTransaction[] {
     const list = accountId
       ? transactions.filter((t) => t.accountId === accountId)
       : [...transactions];
-    return [...list].sort(
-      (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt),
-    );
+    return [...list].sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
   },
   addTransaction(tx: MockTransaction): void {
     transactions = [tx, ...transactions];
   },
 
   listRequests(): MockRequest[] {
-    return [...requests].sort(
-      (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt),
-    );
+    return [...requests].sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
   },
   listRequestsByUser(userId: string): MockRequest[] {
     return requests
@@ -90,11 +84,7 @@ export const db = {
   addRequest(req: MockRequest): void {
     requests = [req, ...requests];
   },
-  setRequestStatus(
-    id: string,
-    status: RequestStatus,
-    resolvedBy: string,
-  ): MockRequest | undefined {
+  setRequestStatus(id: string, status: RequestStatus, resolvedBy: string): MockRequest | undefined {
     let updated: MockRequest | undefined;
     requests = requests.map((r) => {
       if (r.id === id) {
@@ -123,9 +113,7 @@ export const db = {
   },
 
   listAudit(): MockAuditEntry[] {
-    return [...audit].sort(
-      (a, b) => +new Date(b.timestamp) - +new Date(a.timestamp),
-    );
+    return [...audit].sort((a, b) => +new Date(b.timestamp) - +new Date(a.timestamp));
   },
   addAudit(entry: MockAuditEntry): void {
     audit = [entry, ...audit];

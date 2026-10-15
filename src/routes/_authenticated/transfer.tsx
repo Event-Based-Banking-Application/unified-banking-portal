@@ -153,8 +153,8 @@ function TransferPage() {
               Balances update the moment the event commits.
             </li>
             <li className="flex gap-2">
-              <Icon name="check" className="mt-0.5 size-4 shrink-0 text-success" />
-              A <span className="font-mono">transfer.settled</span> event is appended to the stream.
+              <Icon name="check" className="mt-0.5 size-4 shrink-0 text-success" />A{" "}
+              <span className="font-mono">transfer.settled</span> event is appended to the stream.
             </li>
             <li className="flex gap-2">
               <Icon name="check" className="mt-0.5 size-4 shrink-0 text-success" />
