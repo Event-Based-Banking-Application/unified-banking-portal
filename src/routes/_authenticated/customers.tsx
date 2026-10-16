@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/page-header";
 import { StatusPill } from "@/components/status-pill";
 import { StatCard } from "@/components/stat-card";
 import { Icon } from "@/components/icons";
+import { EmptyState } from "@/components/empty-state";
 import { toast } from "sonner";
 import type { MockUser } from "@/lib/mock/types";
 

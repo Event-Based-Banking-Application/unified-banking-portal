@@ -8,6 +8,7 @@ import { StatCard } from "@/components/stat-card";
 import { StatusPill } from "@/components/status-pill";
 import { EventFeed } from "@/components/event-feed";
 import { Icon } from "@/components/icons";
+import { EmptyState } from "@/components/empty-state";
 import {
   REQUEST_TYPE_LABELS,
   REQUEST_STATUS_LABELS,
@@ -43,15 +44,17 @@ function DashboardPage() {
 
 function CustomerDashboard() {
   const { user } = useAuth();
-  if (!user) return null;
   const { data: accounts } = useQuery({
-    queryKey: ["accounts", user.id],
-    queryFn: () => api.getAccounts(user.id),
+    queryKey: ["accounts", user?.id],
+    queryFn: () => api.getAccounts(user!.id),
+    enabled: !!user,
   });
   const { data: requests } = useQuery({
-    queryKey: ["requests", user.id],
-    queryFn: () => api.getRequests(user.id),
+    queryKey: ["requests", user?.id],
+    queryFn: () => api.getRequests(user!.id),
+    enabled: !!user,
   });
+  if (!user) return null;
   const total = (accounts ?? []).reduce((s, a) => s + a.balance, 0);
   const pending = (requests ?? []).filter((r) => r.status === "pending").length;
 
@@ -101,15 +104,21 @@ function CustomerDashboard() {
                     {formatCurrency(a.balance, a.currency)}
                   </p>
                   <StatusPill
-                    tone={a.status === "active" ? "success" : a.status === "frozen" ? "danger" : "warn"}
+                    tone={
+                      a.status === "active" ? "success" : a.status === "frozen" ? "danger" : "warn"
+                    }
                     label={a.status}
                   />
                 </div>
               </li>
             ))}
             {accounts?.length === 0 && (
-              <li className="px-4 py-8 text-center text-sm text-muted-foreground">
-                No accounts yet.
+              <li className="px-4 py-8">
+                <EmptyState
+                  icon="wallet"
+                  title="No accounts yet"
+                  description="Open an account to get started."
+                />
               </li>
             )}
           </ul>
@@ -137,8 +146,12 @@ function CustomerDashboard() {
               </li>
             ))}
             {requests?.length === 0 && (
-              <li className="px-4 py-8 text-center text-sm text-muted-foreground">
-                No requests yet.
+              <li className="px-4 py-8">
+                <EmptyState
+                  icon="inbox"
+                  title="No requests yet"
+                  description="You don't have any requests."
+                />
               </li>
             )}
           </ul>
@@ -213,8 +226,12 @@ function BankAdminDashboard() {
               </li>
             ))}
             {pending.length === 0 && (
-              <li className="px-4 py-8 text-center text-sm text-muted-foreground">
-                Nothing pending. Nice.
+              <li className="px-4 py-8">
+                <EmptyState
+                  icon="check-circle"
+                  title="All caught up"
+                  description="No pending requests to review."
+                />
               </li>
             )}
           </ul>
@@ -284,7 +301,11 @@ function SystemAdminDashboard() {
                     {s.region} · {s.latencyMs}ms · depth {s.depth}
                   </p>
                 </div>
-                <StatusPill tone={svcTone[s.status]} label={SERVICE_STATUS_LABELS[s.status]} live={s.status !== "healthy"} />
+                <StatusPill
+                  tone={svcTone[s.status]}
+                  label={SERVICE_STATUS_LABELS[s.status]}
+                  live={s.status !== "healthy"}
+                />
               </li>
             ))}
           </ul>

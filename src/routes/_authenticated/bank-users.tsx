@@ -7,6 +7,7 @@ import { StatusPill } from "@/components/status-pill";
 import { StatCard } from "@/components/stat-card";
 import { RoleBadge } from "@/components/role-badge";
 import { Icon } from "@/components/icons";
+import { EmptyState } from "@/components/empty-state";
 import { toast } from "sonner";
 import type { MockUser } from "@/lib/mock/types";
 
@@ -42,7 +43,9 @@ function BankUsersPage() {
         description="Admin and operations staff with platform access."
         actions={
           <button
-            onClick={() => toast.info("In production, bank-user creation routes through the request workflow.")}
+            onClick={() =>
+              toast.info("In production, bank-user creation routes through the request workflow.")
+            }
             className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
           >
             <Icon name="plus" className="size-4" />
@@ -54,7 +57,11 @@ function BankUsersPage() {
       <div className="grid gap-3 sm:grid-cols-3">
         <StatCard label="Total" value={list.length} />
         <StatCard label="Active" value={active} tone="success" />
-        <StatCard label="Suspended" value={list.filter((u) => u.status === "suspended").length} tone="danger" />
+        <StatCard
+          label="Suspended"
+          value={list.filter((u) => u.status === "suspended").length}
+          tone="danger"
+        />
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-card">

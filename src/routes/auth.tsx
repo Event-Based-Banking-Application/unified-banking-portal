@@ -32,7 +32,11 @@ export const Route = createFileRoute("/auth")({
       },
     ],
   }),
-  component: () => (<CommandLineProvider><AuthPage /></CommandLineProvider>),
+  component: () => (
+    <CommandLineProvider>
+      <AuthPage />
+    </CommandLineProvider>
+  ),
 });
 
 function AuthPage() {
@@ -85,12 +89,13 @@ function AuthPage() {
             Event-driven banking
           </p>
           <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-foreground">
-            One platform.<br />Three roles. <span className="text-primary">One login.</span>
+            One platform.
+            <br />
+            Three roles. <span className="text-primary">One login.</span>
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            Customers, bank admins, and system operators all sign in here. The
-            interface you get is shaped by your role and permissions — nothing
-            you don't need, nothing you shouldn't see.
+            Customers, bank admins, and system operators all sign in here. The interface you get is
+            shaped by your role and permissions — nothing you don't need, nothing you shouldn't see.
           </p>
           <div className="mt-8 grid grid-cols-3 gap-3 font-mono text-[11px]">
             <Metric label="Events / sec" value="14.2k" />
@@ -173,9 +178,7 @@ function AuthPage() {
                 <div className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-background px-2 text-[11px] text-muted-foreground">
-                  or
-                </span>
+                <span className="bg-background px-2 text-[11px] text-muted-foreground">or</span>
               </div>
             </div>
 
@@ -224,9 +227,7 @@ function AuthPage() {
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border border-border bg-card/60 px-3 py-2">
-      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-        {label}
-      </p>
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>
       <p className="mt-0.5 text-sm font-semibold text-foreground">{value}</p>
     </div>
   );

@@ -45,4 +45,3 @@ export const ROLE_TONES: Record<Role, string> = {
   bank_admin: "text-foreground bg-background ring-foreground",
   system_admin: "text-muted-foreground bg-muted ring-border",
 };
-

@@ -19,8 +19,7 @@ function AccountsPage() {
   const isBankAdmin = user?.role === "bank_admin";
   const { data: accounts, isLoading } = useQuery({
     queryKey: ["accounts", isBankAdmin ? "all" : user?.id],
-    queryFn: () =>
-      isBankAdmin ? api.getAccounts() : api.getAccounts(user!.id),
+    queryFn: () => (isBankAdmin ? api.getAccounts() : api.getAccounts(user!.id)),
   });
 
   const list = accounts ?? [];
@@ -41,7 +40,11 @@ function AccountsPage() {
       <div className="grid gap-3 sm:grid-cols-3">
         <StatCard label="Total balance" value={formatCurrency(total, "USD")} tone="info" />
         <StatCard label="Accounts" value={list.length} />
-        <StatCard label="Active" value={list.filter((a) => a.status === "active").length} tone="success" />
+        <StatCard
+          label="Active"
+          value={list.filter((a) => a.status === "active").length}
+          tone="success"
+        />
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-card">
@@ -68,7 +71,9 @@ function AccountsPage() {
                 <td className="px-4 py-3 capitalize text-muted-foreground">{a.type}</td>
                 <td className="px-4 py-3">
                   <StatusPill
-                    tone={a.status === "active" ? "success" : a.status === "frozen" ? "danger" : "warn"}
+                    tone={
+                      a.status === "active" ? "success" : a.status === "frozen" ? "danger" : "warn"
+                    }
                     label={a.status}
                   />
                 </td>

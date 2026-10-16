@@ -56,10 +56,7 @@ function ShellInner() {
       {/* Mobile rail */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
-          <div
-            className="absolute inset-0 bg-black/60"
-            onClick={() => setMobileOpen(false)}
-          />
+          <div className="absolute inset-0 bg-black/60" onClick={() => setMobileOpen(false)} />
           <aside className="absolute left-0 top-0 flex h-full w-72 flex-col border-r border-border bg-sidebar">
             <div className="flex items-center justify-between border-b border-border px-4 py-4">
               <Brand />
@@ -115,7 +112,10 @@ function ShellInner() {
               >
                 {">_"}
               </button>
-              <button onClick={cli.open} className="hidden items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 text-muted-foreground hover:bg-muted sm:flex">
+              <button
+                onClick={cli.open}
+                className="hidden items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 text-muted-foreground hover:bg-muted sm:flex"
+              >
                 <span className="font-mono text-[12px]">{">_"}</span>
                 <span className="text-[12px]">Run a command…</span>
                 <span className="ml-3 rounded border border-border px-1 font-mono text-[10px] text-muted-foreground">

@@ -49,9 +49,7 @@ function EventsPage() {
             {rows.length} events · updated {formatDateTime(new Date().toISOString())}
           </span>
         </div>
-        <div className="max-h-[32rem] overflow-y-auto">
-          {isLoading ? null : <EventFeed />}
-        </div>
+        <div className="max-h-[32rem] overflow-y-auto">{isLoading ? null : <EventFeed />}</div>
       </section>
     </div>
   );

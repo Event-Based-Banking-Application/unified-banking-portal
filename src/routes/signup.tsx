@@ -45,13 +45,10 @@ function SignupPage() {
           <div className="mx-auto grid size-12 place-items-center rounded-full bg-success/15 text-success">
             <Icon name="check" className="size-6" />
           </div>
-          <h1 className="mt-4 text-xl font-semibold text-foreground">
-            Request received
-          </h1>
+          <h1 className="mt-4 text-xl font-semibold text-foreground">Request received</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            A bank administrator will review your access request. You'll receive
-            an email at <span className="font-mono text-foreground">{email}</span>{" "}
-            once it's approved.
+            A bank administrator will review your access request. You'll receive an email at{" "}
+            <span className="font-mono text-foreground">{email}</span> once it's approved.
           </p>
           <div className="mt-6">
             <Link

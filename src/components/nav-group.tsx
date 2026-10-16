@@ -3,11 +3,7 @@ import { Icon } from "./icons";
 import type { NavGroupDef } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 
-export function NavGroup({
-  group,
-}: {
-  group: NavGroupDef;
-}) {
+export function NavGroup({ group }: { group: NavGroupDef }) {
   return (
     <div>
       <p className="px-2 pb-1.5 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground/70">

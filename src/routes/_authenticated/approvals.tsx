@@ -10,12 +10,7 @@ import { StatCard } from "@/components/stat-card";
 import { EmptyState } from "@/components/empty-state";
 import { Icon } from "@/components/icons";
 import { toast } from "sonner";
-import { AiReviewPanel } from "@/components/ai-review-panel";
-import {
-  REQUEST_TYPE_LABELS,
-  REQUEST_STATUS_LABELS,
-  type RequestStatus,
-} from "@/lib/mock/types";
+import { REQUEST_TYPE_LABELS, REQUEST_STATUS_LABELS, type RequestStatus } from "@/lib/mock/types";
 
 export const Route = createFileRoute("/_authenticated/approvals")({
   head: () => ({ meta: [{ title: "Approvals — Vantage" }] }),
@@ -31,7 +26,6 @@ const reqTone: Record<RequestStatus, "warn" | "success" | "danger"> = {
 function ApprovalsPage() {
   const { user } = useAuth();
   const qc = useQueryClient();
-  const [reviewId, setReviewId] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | RequestStatus>("pending");
   const { data: requests } = useQuery({
     queryKey: ["requests"],
@@ -131,12 +125,6 @@ function ApprovalsPage() {
                     {r.status === "pending" ? (
                       <div className="flex justify-end gap-1.5">
                         <button
-                          onClick={() => setReviewId(r.id)}
-                          className="rounded-md border border-border px-2.5 py-1 text-[12px] font-medium text-foreground hover:border-foreground"
-                        >
-                          AI review
-                        </button>
-                        <button
                           onClick={() => resolve(r.id, "approved")}
                           className="rounded-md bg-success/15 px-2.5 py-1 text-[12px] font-medium text-success hover:bg-success/25"
                         >
@@ -158,15 +146,6 @@ function ApprovalsPage() {
             </tbody>
           </table>
         </div>
-      )}
-
-      {reviewId && all.find((r) => r.id === reviewId) && (
-        <AiReviewPanel
-          key={reviewId}
-          request={all.find((r) => r.id === reviewId)!}
-          onClose={() => setReviewId(null)}
-          onResolve={(id, status) => { void resolve(id, status); setReviewId(null); }}
-        />
       )}
     </div>
   );
