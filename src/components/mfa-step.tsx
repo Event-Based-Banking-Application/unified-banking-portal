@@ -111,9 +111,6 @@ export function MfaStep({
             </button>
           </div>
         </div>
-        <p className="mt-6 border border-dashed border-border px-3 py-2 font-mono text-[12px] text-muted-foreground">
-          Demo mode — your code: <span className="text-foreground">{challenge.demoCode}</span>
-        </p>
       </div>
     </div>
   );

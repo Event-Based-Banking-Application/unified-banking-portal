@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import type { MockUser } from "@/lib/mock/types";
 
 export const Route = createFileRoute("/_authenticated/customers")({
-  head: () => ({ meta: [{ title: "Customers — Vantage" }] }),
+  head: () => ({ meta: [{ title: "Customers — Arya Banking" }] }),
   component: CustomersPage,
 });
 

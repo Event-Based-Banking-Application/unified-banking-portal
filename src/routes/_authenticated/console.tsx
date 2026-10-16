@@ -8,7 +8,7 @@ import { EventFeed } from "@/components/event-feed";
 import { SERVICE_STATUS_LABELS, type ServiceStatus } from "@/lib/mock/types";
 
 export const Route = createFileRoute("/_authenticated/console")({
-  head: () => ({ meta: [{ title: "Console — Vantage" }] }),
+  head: () => ({ meta: [{ title: "Console — Arya Banking" }] }),
   component: ConsolePage,
 });
 

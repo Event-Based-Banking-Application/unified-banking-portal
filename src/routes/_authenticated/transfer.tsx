@@ -9,7 +9,7 @@ import { Icon } from "@/components/icons";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/transfer")({
-  head: () => ({ meta: [{ title: "Transfer — Vantage" }] }),
+  head: () => ({ meta: [{ title: "Transfer — Arya Banking" }] }),
   component: TransferPage,
 });
 

@@ -10,7 +10,7 @@ import { EmptyState } from "@/components/empty-state";
 import { Icon } from "@/components/icons";
 
 export const Route = createFileRoute("/_authenticated/accounts")({
-  head: () => ({ meta: [{ title: "Accounts — Vantage" }] }),
+  head: () => ({ meta: [{ title: "Accounts — Arya Banking" }] }),
   component: AccountsPage,
 });
 

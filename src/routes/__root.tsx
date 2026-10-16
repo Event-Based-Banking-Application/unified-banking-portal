@@ -82,18 +82,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Vantage — Event-Driven Banking" },
+      { title: "Arya Banking — Event-Driven Banking" },
       {
         name: "description",
         content:
-          "Vantage is an event-driven banking platform with role-based access for customers, bank admins, and system admins.",
+          "Arya Banking is an event-driven banking platform with role-based access for customers, bank admins, and system admins.",
       },
-      { name: "author", content: "Vantage" },
-      { property: "og:title", content: "Vantage — Event-Driven Banking" },
+      { name: "author", content: "Arya Banking" },
+      { property: "og:title", content: "Arya Banking — Event-Driven Banking" },
       {
         property: "og:description",
         content:
-          "Vantage is an event-driven banking platform with role-based access for customers, bank admins, and system admins.",
+          "Arya Banking is an event-driven banking platform with role-based access for customers, bank admins, and system admins.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

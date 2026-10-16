@@ -32,8 +32,6 @@ export interface MfaChallenge {
   totalSteps: number;
   expiresAt: number;
   attemptsLeft: number;
-  /** Mock only: the code is displayed so the demo can be completed. */
-  demoCode: string;
   maskedDestination: string;
 }
 
@@ -83,15 +81,17 @@ function publicChallenge(c: ChallengeState): MfaChallenge {
 }
 
 function issueFactor(
-  c: Omit<ChallengeState, "method" | "code" | "demoCode" | "expiresAt" | "maskedDestination">,
+  c: Omit<ChallengeState, "method" | "code" | "expiresAt" | "maskedDestination">,
   method: MfaMethod,
 ): ChallengeState {
   const code = newCode();
+  // To verify login, simply type any code for the mock.
+  // We'll log the code in console to make testing easy without displaying in UI.
+  console.log(`MFA Code for ${c.email}: ${code}`);
   return {
     ...c,
     method,
     code,
-    demoCode: code,
     expiresAt: Date.now() + MFA_POLICY[c.role].codeTtlMs,
     maskedDestination: method === "totp" ? "your authenticator app" : maskEmail(c.email),
   };

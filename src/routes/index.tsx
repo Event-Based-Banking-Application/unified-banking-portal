@@ -8,17 +8,17 @@ import { StatCard } from "@/components/stat-card";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Vantage — Event-Driven Banking Platform" },
+      { title: "Arya Banking — Event-Driven Banking Platform" },
       {
         name: "description",
         content:
-          "Vantage is an event-driven banking platform with role-based access for customers, bank admins, and system admins.",
+          "Arya Banking is an event-driven banking platform with role-based access for customers, bank admins, and system admins.",
       },
-      { property: "og:title", content: "Vantage — Event-Driven Banking Platform" },
+      { property: "og:title", content: "Arya Banking — Event-Driven Banking Platform" },
       {
         property: "og:description",
         content:
-          "Vantage is an event-driven banking platform with role-based access for customers, bank admins, and system admins.",
+          "Arya Banking is an event-driven banking platform with role-based access for customers, bank admins, and system admins.",
       },
     ],
   }),
@@ -69,7 +69,7 @@ function IndexPage() {
               Banking that runs on <span className="text-primary">events</span>, not batch jobs.
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
-              Vantage is an event-driven banking platform. Customers bank, bank admins approve, and
+              Arya Banking is an event-driven banking platform. Customers bank, bank admins approve, and
               system operators watch every event flow through the core — all behind a single login
               that adapts to your role.
             </p>
@@ -142,30 +142,12 @@ function IndexPage() {
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="rounded-2xl border border-border bg-sidebar px-6 py-10 text-center sm:px-10">
-          <h2 className="text-2xl font-semibold tracking-tight text-foreground">Try the demo</h2>
-          <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-            Sign in as a customer, bank admin, or system admin — the interface changes with the
-            role. Password for every demo account is{" "}
-            <span className="font-mono text-foreground">demo1234</span>.
-          </p>
-          <div className="mt-6">
-            <Link
-              to="/auth"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-            >
-              Open the app
-              <Icon name="arrow-right" className="size-4" />
-            </Link>
-          </div>
-        </section>
       </main>
 
       <footer className="mt-16 border-t border-border">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-6 text-[12px] text-muted-foreground sm:px-6">
-          <span>Vantage Bank · Event-driven banking</span>
-          <span className="font-mono">v0.1.0 · mock backend</span>
+          <span>Arya Banking · Event-driven banking</span>
+          <span className="font-mono">v0.1.0</span>
         </div>
       </footer>
     </div>
