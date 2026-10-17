@@ -17,7 +17,7 @@ import {
 } from "@/lib/mock/types";
 
 export const Route = createFileRoute("/_authenticated/requests")({
-  head: () => ({ meta: [{ title: "My requests — Vantage" }] }),
+  head: () => ({ meta: [{ title: "My requests — Arya Banking" }] }),
   component: RequestsPage,
 });
 

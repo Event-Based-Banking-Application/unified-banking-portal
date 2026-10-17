@@ -1,7 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth/auth-context";
-import { DEMO_CREDENTIALS } from "@/lib/mock/seed";
 import { Brand } from "@/components/brand";
 import { Icon } from "@/components/icons";
 import { toast } from "sonner";
@@ -25,10 +24,10 @@ function CliLoginButton() {
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Vantage" },
+      { title: "Sign in — Arya Banking" },
       {
         name: "description",
-        content: "Sign in to Vantage, the event-driven banking platform.",
+        content: "Sign in to Arya Banking, the event-driven banking platform.",
       },
     ],
   }),
@@ -104,7 +103,7 @@ function AuthPage() {
           </div>
         </div>
         <p className="font-mono text-[11px] text-muted-foreground/60">
-          Vantage Bank · SOC2 Type II
+          Arya Banking · SOC2 Type II
         </p>
       </div>
 
@@ -118,7 +117,7 @@ function AuthPage() {
             Sign in
           </h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            Use your Vantage credentials or continue with SSO.
+            Use your Arya Banking credentials or continue with SSO.
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
@@ -133,7 +132,7 @@ function AuthPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@vantagebank.com"
+                placeholder="you@aryabanking.com"
                 className="mt-1.5 w-full rounded-lg border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
             </div>
@@ -199,25 +198,6 @@ function AuthPage() {
               Request access
             </Link>
           </p>
-
-          <div className="mt-8 rounded-xl border border-border bg-card p-3">
-            <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-              Demo accounts (password: demo1234)
-            </p>
-            <div className="mt-2 grid gap-1.5">
-              {DEMO_CREDENTIALS.map((c) => (
-                <button
-                  key={c.email}
-                  type="button"
-                  onClick={() => quickFill(c.email)}
-                  className="flex items-center justify-between rounded-md px-2 py-1.5 text-left text-[12px] transition-colors hover:bg-muted"
-                >
-                  <span className="font-mono text-foreground">{c.email}</span>
-                  <span className="text-muted-foreground">{c.role}</span>
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </div>

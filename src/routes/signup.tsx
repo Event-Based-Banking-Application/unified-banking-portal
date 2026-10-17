@@ -8,10 +8,10 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/signup")({
   head: () => ({
     meta: [
-      { title: "Request access — Vantage" },
+      { title: "Request access — Arya Banking" },
       {
         name: "description",
-        content: "Request access to Vantage, the event-driven banking platform.",
+        content: "Request access to Arya Banking, the event-driven banking platform.",
       },
     ],
   }),
@@ -102,7 +102,7 @@ function SignupPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@vantagebank.com"
+              placeholder="you@aryabanking.com"
               className="mt-1.5 w-full rounded-lg border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
           </div>

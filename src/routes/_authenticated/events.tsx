@@ -8,7 +8,7 @@ import { EventFeed } from "@/components/event-feed";
 import type { EventLevel } from "@/lib/mock/types";
 
 export const Route = createFileRoute("/_authenticated/events")({
-  head: () => ({ meta: [{ title: "Event stream — Vantage" }] }),
+  head: () => ({ meta: [{ title: "Event stream — Arya Banking" }] }),
   component: EventsPage,
 });
 

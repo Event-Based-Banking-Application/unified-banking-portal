@@ -10,11 +10,11 @@ export function Brand({
   return (
     <div className="flex items-center gap-2.5">
       <div className={`grid place-items-center bg-primary text-primary-foreground ${box}`}>
-        <span className="font-display leading-none">V</span>
+        <span className="font-display leading-none">A</span>
       </div>
       {showWordmark && (
         <div className="leading-none">
-          <p className={`${text} font-display leading-none text-foreground`}>VANTAGE</p>
+          <p className={`${text} font-display leading-none text-foreground`}>ARYA</p>
           <p className="eyebrow mt-1 text-muted-foreground">event banking</p>
         </div>
       )}

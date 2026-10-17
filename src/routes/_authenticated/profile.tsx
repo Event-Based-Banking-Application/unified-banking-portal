@@ -9,7 +9,7 @@ import { PERMISSION_GROUPS } from "@/lib/auth/permissions";
 import { formatDateTime } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/profile")({
-  head: () => ({ meta: [{ title: "Profile — Vantage" }] }),
+  head: () => ({ meta: [{ title: "Profile — Arya Banking" }] }),
   component: ProfilePage,
 });
 

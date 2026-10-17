@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { REQUEST_TYPE_LABELS, REQUEST_STATUS_LABELS, type RequestStatus } from "@/lib/mock/types";
 
 export const Route = createFileRoute("/_authenticated/approvals")({
-  head: () => ({ meta: [{ title: "Approvals — Vantage" }] }),
+  head: () => ({ meta: [{ title: "Approvals — Arya Banking" }] }),
   component: ApprovalsPage,
 });
 

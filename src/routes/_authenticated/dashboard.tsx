@@ -19,7 +19,7 @@ import {
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
-    meta: [{ title: "Dashboard — Vantage" }],
+    meta: [{ title: "Dashboard — Arya Banking" }],
   }),
   component: DashboardPage,
 });

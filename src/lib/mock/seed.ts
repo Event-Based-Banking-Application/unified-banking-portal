@@ -15,7 +15,7 @@ export const seedUsers: MockUser[] = [
   {
     id: "u-cust-1",
     name: "Maya Okafor",
-    email: "maya@vantagebank.com",
+    email: "maya@aryabanking.com",
     role: "customer",
     status: "active",
     createdAt: iso(60 * 24 * 30),
@@ -23,7 +23,7 @@ export const seedUsers: MockUser[] = [
   {
     id: "u-bank-1",
     name: "Daniel Reyes",
-    email: "daniel@vantagebank.com",
+    email: "daniel@aryabanking.com",
     role: "bank_admin",
     status: "active",
     createdAt: iso(60 * 24 * 120),
@@ -31,7 +31,7 @@ export const seedUsers: MockUser[] = [
   {
     id: "u-sys-1",
     name: "Asha Kapoor",
-    email: "asha@vantagebank.com",
+    email: "asha@aryabanking.com",
     role: "system_admin",
     status: "active",
     createdAt: iso(60 * 24 * 200),
@@ -39,7 +39,7 @@ export const seedUsers: MockUser[] = [
   {
     id: "u-cust-2",
     name: "Theo Lin",
-    email: "theo@vantagebank.com",
+    email: "theo@aryabanking.com",
     role: "customer",
     status: "active",
     createdAt: iso(60 * 24 * 12),
@@ -47,7 +47,7 @@ export const seedUsers: MockUser[] = [
   {
     id: "u-cust-3",
     name: "Nadia Costa",
-    email: "nadia@vantagebank.com",
+    email: "nadia@aryabanking.com",
     role: "customer",
     status: "pending",
     createdAt: iso(60 * 5),
@@ -139,7 +139,7 @@ export const seedTransactions: MockTransaction[] = [
     id: "tx-4",
     accountId: "acct-9930",
     description: "Interest payment",
-    counterparty: "Vantage Bank",
+    counterparty: "Arya Banking",
     amount: 84.12,
     currency: "USD",
     direction: "credit",
@@ -331,8 +331,3 @@ export const seedAudit: MockAuditEntry[] = [
   },
 ];
 
-export const DEMO_CREDENTIALS = [
-  { role: "Customer", email: "maya@vantagebank.com", password: "demo1234" },
-  { role: "Bank Admin", email: "daniel@vantagebank.com", password: "demo1234" },
-  { role: "System Admin", email: "asha@vantagebank.com", password: "demo1234" },
-] as const;

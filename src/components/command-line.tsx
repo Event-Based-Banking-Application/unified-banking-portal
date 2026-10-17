@@ -11,7 +11,6 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth/auth-context";
 import { available, parse, resolve, type Line } from "@/lib/cli/registry";
-import { DEMO_CREDENTIALS } from "@/lib/mock/seed";
 import type { MfaChallenge } from "@/lib/auth/mock-auth";
 
 interface Entry {
@@ -133,7 +132,7 @@ function Terminal({ onClose }: { onClose: () => void }) {
       lines: [
         {
           kind: "text",
-          text: 'Vantage CLI — type "help", or "ask" + a plain-language task.',
+          text: 'Arya CLI — type "help", or "ask" + a plain-language task.',
           tone: "muted",
         },
       ],
@@ -154,7 +153,7 @@ function Terminal({ onClose }: { onClose: () => void }) {
     bottomRef.current?.scrollIntoView({ block: "end" });
   }, [entries]);
 
-  const prompt = `${user?.email.split("@")[0] ?? "guest"}@vantage:~$`;
+  const prompt = `${user?.email.split("@")[0] ?? "guest"}@aryabanking:~$`;
   useEffect(() => {
     if (!user)
       setEntries([
@@ -163,7 +162,7 @@ function Terminal({ onClose }: { onClose: () => void }) {
             {
               kind: "text",
               tone: "muted",
-              text: 'Vantage CLI — type "login <email>" to sign in, or "demo" for demo accounts.',
+              text: 'Arya CLI — type "login <email>" to sign in.',
             },
           ],
         },
@@ -198,7 +197,6 @@ function Terminal({ onClose }: { onClose: () => void }) {
             },
           ]
         : []),
-      muted(`(demo code: ${c.demoCode})`),
     ];
     if (mfa) {
       print({ prompt: input.replace(/./g, "•"), lines: [] });
@@ -267,7 +265,6 @@ function Terminal({ onClose }: { onClose: () => void }) {
               head: ["Command", "What it does"],
               rows: [
                 ["login <email>", "Sign in (you'll be asked for your password)"],
-                ["demo", "List demo accounts"],
                 ["signup", "Open the request-access page"],
                 ["clear", "Clear the screen"],
               ],
@@ -278,21 +275,10 @@ function Terminal({ onClose }: { onClose: () => void }) {
       case "signin": {
         const email = args[0];
         if (!email)
-          return print({ prompt: input, lines: [err("Usage: login you@vantagebank.com")] });
+          return print({ prompt: input, lines: [err("Usage: login you@aryabanking.com")] });
         setLoginEmail(email);
         return print({ prompt: input, lines: [muted(`Password for ${email}:`)] });
       }
-      case "demo":
-        return print({
-          prompt: input,
-          lines: [
-            {
-              kind: "table",
-              head: ["Role", "Email", "Password"],
-              rows: DEMO_CREDENTIALS.map((c) => [String(c.role), c.email, c.password]),
-            },
-          ],
-        });
       case "signup":
         navigate({ to: "/signup" });
         onClose();
